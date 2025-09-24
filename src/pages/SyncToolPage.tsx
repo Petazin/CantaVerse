@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import YouTube from 'react-youtube';
 import type { YouTubePlayer } from 'youtube-player/dist/types';
-import './SyncToolPage.css';
 
+// --- Tipos de Datos ---
 interface SyncedLine {
   time: number;
-  text: string;
+  original: string;
+  translated: string;
 }
-
-// Estructura del archivo final
 interface SongData {
   videoId: string;
   title: string;
@@ -17,128 +17,119 @@ interface SongData {
 }
 
 export default function SyncToolPage() {
-  // Estados para los inputs
-  const [url, setUrl] = useState('');
-  const [videoId, setVideoId] = useState<string | null>(null);
-  const [rawLyrics, setRawLyrics] = useState('');
+  const [searchParams] = useSearchParams();
+  const [videoId, setVideoId] = useState<string | null>(searchParams.get('videoId'));
 
-  // Estados para la lógica de sincronización
-  const [lines, setLines] = useState<string[]>([]);
+  // Estados de Texto
+  const [rawLyrics, setRawLyrics] = useState('');
+  const [originalLines, setOriginalLines] = useState<string[]>([]);
+  const [translatedLines, setTranslatedLines] = useState<string[]>([]);
+  const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
+
+  // Estados de Sincronización
   const [syncedLyrics, setSyncedLyrics] = useState<SyncedLine[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [songData, setSongData] = useState<SongData | null>(null);
+  const [finalJson, setFinalJson] = useState<SongData | null>(null);
 
   const playerRef = useRef<YouTubePlayer | null>(null);
+  const previewLineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
-  const handleLoadVideo = () => {
+  // --- Lógica de Carga y Traducción ---
+  const handleProcessOriginalLyrics = () => {
+    const processed = rawLyrics.split('\n').filter(line => line.trim() !== '');
+    setOriginalLines(processed);
+    setTranslatedLines([]);
+    setCurrentIndex(0);
+    setSyncedLyrics([]);
+    setFinalJson(null);
+  };
+
+  const handleFetchTranslation = async () => {
+    if (originalLines.length === 0) return alert('Primero carga la letra original.');
+    setIsLoadingTranslation(true);
     try {
-      const urlObject = new URL(url);
-      let id = urlObject.searchParams.get('v');
-      if (!id) id = urlObject.pathname.substring(1);
-      setVideoId(id);
-    } catch (err) {
-      alert('URL de YouTube inválida.');
+      const response = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lines: originalLines, targetLang: 'es' }),
+      });
+      if (!response.ok) throw new Error('La traducción de la API falló.');
+      const data = await response.json();
+      setTranslatedLines(data.translatedLines);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsLoadingTranslation(false);
     }
   };
 
-  const handleLoadLyrics = () => {
-    const processedLines = rawLyrics.split('\n').filter(line => line.trim() !== '');
-    setLines(processedLines);
-    setCurrentIndex(0);
-    setSyncedLyrics([]);
-    alert(`Letra cargada con ${processedLines.length} líneas.`);
-  };
-
-  const handleCopyToClipboard = () => {
-    if (!songData) return;
-    navigator.clipboard.writeText(JSON.stringify(songData, null, 2));
-    alert('JSON copiado al portapapeles.');
-  }
-
+  // --- Lógica de Sincronización ---
   const handleMarkTime = () => {
-    if (!playerRef.current || currentIndex >= lines.length) return;
-
+    if (!playerRef.current || currentIndex >= originalLines.length) return;
     const currentTime = playerRef.current.getCurrentTime();
-    const newSyncedLine: SyncedLine = {
+    const newSyncedLine = {
       time: parseFloat(currentTime.toFixed(2)),
-      text: lines[currentIndex],
+      original: originalLines[currentIndex],
+      translated: translatedLines[currentIndex] || originalLines[currentIndex],
     };
-
     setSyncedLyrics(prev => [...prev, newSyncedLine]);
     setCurrentIndex(prev => prev + 1);
   };
 
-  // Generar el JSON final cuando se termina de sincronizar
   useEffect(() => {
-    if (lines.length > 0 && currentIndex === lines.length) {
+    if (originalLines.length > 0 && currentIndex === originalLines.length) {
       const videoData = playerRef.current?.getVideoData();
       const fullTitle = videoData?.title || 'Sin Título';
-      
-      // Reutilizamos la lógica de parseo de títulos
       const parts = fullTitle.replace(/\s*\(.*?\)|\s*\[.*?\]/g, '').trim().split(/\s*[-–—]\s*/);
       const artist = parts.length >= 2 ? parts[0].trim() : 'Artista Desconocido';
       const title = parts.length >= 2 ? parts[1].trim() : fullTitle;
-
-      setSongData({
-        videoId: videoId || '',
-        title: title,
-        artist: artist,
-        lyrics: syncedLyrics,
-      });
+      setFinalJson({ videoId: videoId || '', title, artist, lyrics: syncedLyrics });
     }
-  }, [currentIndex, lines, syncedLyrics, videoId]);
+  }, [currentIndex, originalLines, syncedLyrics, videoId]);
+
+  // Auto-scroll para la vista previa
+  useEffect(() => {
+    if (currentIndex >= 0 && previewLineRefs.current[currentIndex]) {
+      previewLineRefs.current[currentIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [currentIndex]);
 
   // Atajo de teclado
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        handleMarkTime();
-      }
-    };
+    const handleKeyPress = (e: KeyboardEvent) => { if (e.code === 'Space') { e.preventDefault(); handleMarkTime(); } };
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleMarkTime]);
 
-  const playerOptions = { height: '270', width: '480' };
+  const playerOptions = { height: '390', width: '640' };
 
   return (
-    <div className="sync-tool-container">
-       <div className="sync-tool-left">
-        <h3>1. Cargar Video</h3>
-        <div className="url-input-container">
-          <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Pega la URL de YouTube" />
-          <button onClick={handleLoadVideo}>Cargar Video</button>
-        </div>
+    <div className="page-container">
+      <div className="player-area">
+        <h2>Herramienta de Sincronización</h2>
         {videoId && <YouTube videoId={videoId} opts={playerOptions} onReady={(e) => { playerRef.current = e.target; }} />}
-        
-        <h3>4. Resultado JSON</h3>
-        <textarea 
-          className="json-output-area"
-          readOnly
-          value={songData ? JSON.stringify(songData, null, 2) : 'Aquí aparecerá el JSON generado...'}
-        />
-        <button onClick={handleCopyToClipboard}>Copiar al Portapapeles</button>
+        <h3>Controles</h3>
+        <div className="controls-grid">
+          <textarea value={rawLyrics} onChange={(e) => setRawLyrics(e.target.value)} placeholder="1. Pega la letra original aquí..." />
+          <button onClick={handleProcessOriginalLyrics}>Cargar Letra</button>
+          <button onClick={handleFetchTranslation} disabled={isLoadingTranslation}>{isLoadingTranslation ? 'Traduciendo...' : 'Buscar Traducción'}</button>
+          <button onClick={handleMarkTime}>Marcar Tiempo (Espacio)</button>
+        </div>
+        <h3>Resultado JSON</h3>
+        <textarea readOnly value={finalJson ? JSON.stringify(finalJson, null, 2) : ''} />
+        <button onClick={() => navigator.clipboard.writeText(JSON.stringify(finalJson, null, 2))} disabled={!finalJson}>Copiar</button>
       </div>
-
-      <div className="sync-tool-right">
-        <h3>2. Pegar Letra</h3>
-        <textarea
-          className="lyrics-input-area"
-          value={rawLyrics}
-          onChange={(e) => setRawLyrics(e.target.value)}
-          placeholder="Pega aquí la letra de la canción, una línea por verso..."
-        />
-        <button onClick={handleLoadLyrics}>Cargar Letra</button>
-
-        <h3>3. Sincronizar</h3>
-        <button onClick={handleMarkTime}>Marcar Tiempo (Espacio)</button>
-        <div className="live-preview-container">
-          {lines.length === 0 && <p>La vista previa de la letra aparecerá aquí...</p>}
-          {lines.map((line, index) => (
-            <p key={index} className={index === currentIndex ? 'current-line' : ''}>
-              {line}
-            </p>
+      <div className="lyrics-display">
+        <div className="lyrics-column">
+          <h3>Original</h3>
+          {originalLines.map((line, index) => (
+            <p key={index} ref={el => previewLineRefs.current[index] = el} className={index === currentIndex ? 'active' : ''}>{line}</p>
+          ))}
+        </div>
+        <div className="lyrics-column">
+          <h3>Traducción</h3>
+          {translatedLines.map((line, index) => (
+            <p key={index} className={index === currentIndex ? 'active' : ''}>{line}</p>
           ))}
         </div>
       </div>

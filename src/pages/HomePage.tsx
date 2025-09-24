@@ -1,93 +1,62 @@
-import { useState, useRef, useEffect } from 'react';
-import YouTube from 'react-youtube';
-import type { YouTubePlayer } from 'youtube-player/dist/types';
-
-import songData from '../data/slipknot-wait-and-bleed.json';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { songLibrary } from '../data';
 
 function HomePage() {
-  const [activeLineIndex, setActiveLineIndex] = useState(-1);
-  const [syncOffset, setSyncOffset] = useState(0.3);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [url, setUrl] = useState('');
+  const navigate = useNavigate();
 
-  const playerRef = useRef<YouTubePlayer | null>(null);
-  const lineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
-
-  useEffect(() => {
-    if (activeLineIndex >= 0 && lineRefs.current[activeLineIndex]) {
-      lineRefs.current[activeLineIndex]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }
-  }, [activeLineIndex]);
-
-  const onPlayerReady = (event: { target: YouTubePlayer }) => {
-    playerRef.current = event.target;
-  };
-
-  const onPlayerStateChange = (event: { data: number }) => {
-    setIsPlaying(event.data === 1);
-  };
-
-  useEffect(() => {
-    if (!isPlaying) return;
-
-    const intervalId = setInterval(() => {
-      const currentTime = playerRef.current?.getCurrentTime();
-      if (currentTime === undefined) return;
-
-      const lookahead = syncOffset;
-      let newActiveLineIndex = -1;
-
-      for (let i = songData.lyrics.length - 1; i >= 0; i--) {
-        if (currentTime + lookahead >= songData.lyrics[i].time) {
-          newActiveLineIndex = i;
-          break;
-        }
-      }
+  const handleLoadFromUrl = () => {
+    try {
+      const urlObject = new URL(url);
+      const videoId = urlObject.searchParams.get('v') || urlObject.pathname.substring(1);
       
-      setActiveLineIndex(prevIndex => prevIndex !== newActiveLineIndex ? newActiveLineIndex : prevIndex);
+      if (!videoId) {
+        alert("No se pudo encontrar un ID de video en la URL.");
+        return;
+      }
 
-    }, 100);
+      // Comprobar si la canción ya existe en la librería local
+      const existingSong = songLibrary.find(song => song.videoId === videoId);
 
-    return () => clearInterval(intervalId);
-  }, [isPlaying, syncOffset]);
+      if (existingSong) {
+        // Si existe, ir directamente al reproductor
+        navigate(`/player/${videoId}`);
+      } else {
+        // Si es nueva, ir a la herramienta de sincronización con el video precargado
+        navigate(`/sync-tool?videoId=${videoId}`);
+      }
 
-  const playerOptions = { height: '390', width: '640' };
+    } catch (error) {
+      alert("URL de YouTube inválida.");
+    }
+  };
 
   return (
-    <div className="home-page-container">
-      <div className="player-area">
-        <h2>{songData.artist} - {songData.title}</h2>
-        <YouTube 
-          videoId={songData.videoId} 
-          opts={playerOptions} 
-          onReady={onPlayerReady} 
-          onStateChange={onPlayerStateChange} 
-        />
-        <div className="sync-control">
-          <label htmlFor="sync-offset">Ajuste de Sincronización: {syncOffset.toFixed(2)} s</label>
+    <div className="page-container" style={{flexDirection: 'column', alignItems: 'center'}}>
+      <div className="url-loader-section">
+        <h2>Cargar Nueva Canción</h2>
+        <div className="url-input-container">
           <input
-            type="range"
-            id="sync-offset"
-            min="-1"
-            max="3"
-            step="0.05"
-            value={syncOffset}
-            onChange={(e) => setSyncOffset(parseFloat(e.target.value))}
+            type="text"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Pega una URL de YouTube"
           />
+          <button onClick={handleLoadFromUrl}>Cargar</button>
         </div>
       </div>
-      <div className="lyrics-container">
-        {songData.lyrics.map((line, index) => (
-          <p 
-            key={index} 
-            ref={el => lineRefs.current[index] = el}
-            className={index === activeLineIndex ? 'active' : ''}
-          >
-            {line.text}
-          </p>
-        ))}
+      <div className="song-list-container">
+        <h2>Canciones Guardadas</h2>
+        <ul>
+          {songLibrary.map(song => (
+            <li key={song.videoId}>
+              <Link to={`/player/${song.videoId}`}>
+                {song.artist} - {song.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
