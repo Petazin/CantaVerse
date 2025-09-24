@@ -7,7 +7,7 @@ import { songLibrary } from '../data';
 // Tipos de datos
 interface LyricLine {
   time: number;
-  text: string;
+  original: string;
 }
 interface Song {
   videoId: string;
@@ -21,24 +21,24 @@ function PlayerPage() {
   const songData = songLibrary.find(song => song.videoId === songId) as Song | undefined;
 
   // Estados
-  const [translatedLyrics, setTranslatedLyrics] = useState<string[] | null>(null);
+  const [translatedLines, setTranslatedLines] = useState<string[] | null>(null);
   const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
   const [activeLineIndex, setActiveLineIndex] = useState(-1);
   const [syncOffset, setSyncOffset] = useState(0.3);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const playerRef = useRef<YouTubePlayer | null>(null);
-  // Dos juegos de referencias, uno para cada columna
   const originalLineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
   const translatedLineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
   // Efecto para traducir la letra
   useEffect(() => {
     if (!songData) return;
+
     const translate = async () => {
       setIsLoadingTranslation(true);
       try {
-        const originalLines = songData.lyrics.map(line => line.text);
+        const originalLines = songData.lyrics.map(line => line.original);
         const response = await fetch('/api/translate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -46,10 +46,10 @@ function PlayerPage() {
         });
         if (!response.ok) throw new Error('La traducción falló');
         const data = await response.json();
-        setTranslatedLyrics(data.translatedLines);
+        setTranslatedLines(data.translatedLines);
       } catch (error) {
         console.error(error);
-        setTranslatedLyrics(null);
+        setTranslatedLines(null); // No mostrar nada si falla
       } finally {
         setIsLoadingTranslation(false);
       }
@@ -57,7 +57,7 @@ function PlayerPage() {
     translate();
   }, [songData]);
 
-  // Efecto para el auto-scroll sincronizado
+  // ... (Lógica de auto-scroll y sincronización sin cambios) ...
   useEffect(() => {
     if (activeLineIndex < 0) return;
     const scrollOptions: ScrollIntoViewOptions = { behavior: 'smooth', block: 'center' };
@@ -68,7 +68,6 @@ function PlayerPage() {
   const onPlayerReady = (event: { target: YouTubePlayer }) => { playerRef.current = event.target; };
   const onPlayerStateChange = (event: { data: number }) => { setIsPlaying(event.data === 1); };
 
-  // Efecto para la lógica de sincronización
   useEffect(() => {
     if (!isPlaying || !songData) return;
     const intervalId = setInterval(() => {
@@ -86,10 +85,7 @@ function PlayerPage() {
     return () => clearInterval(intervalId);
   }, [isPlaying, syncOffset, songData]);
 
-  if (!songData) {
-    // TODO: Implementar la lógica de búsqueda en API para canciones no locales
-    return <div>Canción no encontrada en la librería local.</div>;
-  }
+  if (!songData) return <div>Canción no encontrada.</div>;
 
   const playerOptions = { height: '390', width: '640' };
 
@@ -108,15 +104,15 @@ function PlayerPage() {
           <h3>Original</h3>
           {songData.lyrics.map((line, index) => (
             <p key={index} ref={el => originalLineRefs.current[index] = el} className={index === activeLineIndex ? 'active' : ''}>
-              {line.text}
+              {line.original}
             </p>
           ))}
         </div>
         <div className="lyrics-column">
           <h3>Traducción {isLoadingTranslation ? '(Cargando...)' : ''}</h3>
-          {translatedLyrics && songData.lyrics.map((line, index) => (
+          {translatedLines && songData.lyrics.map((line, index) => (
             <p key={index} ref={el => translatedLineRefs.current[index] = el} className={index === activeLineIndex ? 'active' : ''}>
-              {translatedLyrics[index] || ''}
+              {translatedLines[index] || ''}
             </p>
           ))}
         </div>

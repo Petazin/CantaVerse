@@ -3,340 +3,72 @@
   "title": "Break Stuff",
   "artist": "Limp Bizkit",
   "lyrics": [
-    {
-      "time": 4.54,
-      "original": "It's just one of those days",
-      "translated": "It's just one of those days"
-    },
-    {
-      "time": 5.92,
-      "original": "When you don't wanna wake up",
-      "translated": "When you don't wanna wake up"
-    },
-    {
-      "time": 7.48,
-      "original": "Everything is fucked",
-      "translated": "Everything is fucked"
-    },
-    {
-      "time": 8.71,
-      "original": "Everybody sucks",
-      "translated": "Everybody sucks"
-    },
-    {
-      "time": 9.92,
-      "original": "You don't really know why",
-      "translated": "You don't really know why"
-    },
-    {
-      "time": 11.48,
-      "original": "But you wanna justify",
-      "translated": "But you wanna justify"
-    },
-    {
-      "time": 13.15,
-      "original": "Rippin' someone's head off",
-      "translated": "Rippin' someone's head off"
-    },
-    {
-      "time": 14.6,
-      "original": "No human contact",
-      "translated": "No human contact"
-    },
-    {
-      "time": 16.28,
-      "original": "And if you interact",
-      "translated": "And if you interact"
-    },
-    {
-      "time": 17.47,
-      "original": "Your life is on contract",
-      "translated": "Your life is on contract"
-    },
-    {
-      "time": 20.17,
-      "original": "Your best bet is to stay away, motherfucker!",
-      "translated": "Your best bet is to stay away, motherfucker!"
-    },
-    {
-      "time": 21.72,
-      "original": "It's just one of those days",
-      "translated": "It's just one of those days"
-    },
-    {
-      "time": 25.82,
-      "original": "It's all about the he says/she says bullshit",
-      "translated": "It's all about the he says/she says bullshit"
-    },
-    {
-      "time": 29.18,
-      "original": "I think you better quit lettin' shit slip",
-      "translated": "I think you better quit lettin' shit slip"
-    },
-    {
-      "time": 30.7,
-      "original": "Or you'll be leavin' with a fat lip",
-      "translated": "Or you'll be leavin' with a fat lip"
-    },
-    {
-      "time": 35.31,
-      "original": "It's all about the he says/she says bullshit",
-      "translated": "It's all about the he says/she says bullshit"
-    },
-    {
-      "time": 38.3,
-      "original": "I think you better quit talkin' that shit",
-      "translated": "I think you better quit talkin' that shit"
-    },
-    {
-      "time": 39.75,
-      "original": "It's just one of those days",
-      "translated": "It's just one of those days"
-    },
-    {
-      "time": 40.99,
-      "original": "Feelin' like a freight train",
-      "translated": "Feelin' like a freight train"
-    },
-    {
-      "time": 42.29,
-      "original": "First one to complain",
-      "translated": "First one to complain"
-    },
-    {
-      "time": 43.83,
-      "original": "Leaves with a blood stain",
-      "translated": "Leaves with a blood stain"
-    },
-    {
-      "time": 45.43,
-      "original": "Damn right, I'm a maniac",
-      "translated": "Damn right, I'm a maniac"
-    },
-    {
-      "time": 46.76,
-      "original": "You better watch your back",
-      "translated": "You better watch your back"
-    },
-    {
-      "time": 48.08,
-      "original": "'Cause I'm fuckin' up your program",
-      "translated": "'Cause I'm fuckin' up your program"
-    },
-    {
-      "time": 49.71,
-      "original": "And if you're stuck up",
-      "translated": "And if you're stuck up"
-    },
-    {
-      "time": 50.88,
-      "original": "You're just lucked up",
-      "translated": "You're just lucked up"
-    },
-    {
-      "time": 52.42,
-      "original": "Next in line to get fucked up",
-      "translated": "Next in line to get fucked up"
-    },
-    {
-      "time": 55.16,
-      "original": "Your best bet is to stay away, motherfucker!",
-      "translated": "Your best bet is to stay away, motherfucker!"
-    },
-    {
-      "time": 56.95,
-      "original": "It's just one of those days",
-      "translated": "It's just one of those days"
-    },
-    {
-      "time": 61.44,
-      "original": "It's all about the he says/she says bullshit",
-      "translated": "It's all about the he says/she says bullshit"
-    },
-    {
-      "time": 64.26,
-      "original": "I think you better quit lettin' shit slip",
-      "translated": "I think you better quit lettin' shit slip"
-    },
-    {
-      "time": 65.62,
-      "original": "Or you'll be leavin' with a fat lip",
-      "translated": "Or you'll be leavin' with a fat lip"
-    },
-    {
-      "time": 70,
-      "original": "It's all about the he says/she says bullshit",
-      "translated": "It's all about the he says/she says bullshit"
-    },
-    {
-      "time": 72.78,
-      "original": "I think you better quit talkin' that shit",
-      "translated": "I think you better quit talkin' that shit"
-    },
-    {
-      "time": 74.51,
-      "original": "Punk, so come and get it",
-      "translated": "Punk, so come and get it"
-    },
-    {
-      "time": 78.14,
-      "original": "I feel like shit",
-      "translated": "I feel like shit"
-    },
-    {
-      "time": 81.54,
-      "original": "My suggestion is to keep your distance",
-      "translated": "My suggestion is to keep your distance"
-    },
-    {
-      "time": 83.92,
-      "original": "'Cause right now I'm dangerous",
-      "translated": "'Cause right now I'm dangerous"
-    },
-    {
-      "time": 86.16,
-      "original": "We've all felt like shit",
-      "translated": "We've all felt like shit"
-    },
-    {
-      "time": 91.65,
-      "original": "And been treated like shit",
-      "translated": "And been treated like shit"
-    },
-    {
-      "time": 92.2,
-      "original": "All those motherfuckers that want to step up",
-      "translated": "All those motherfuckers that want to step up"
-    },
-    {
-      "time": 94.48,
-      "original": "I hope you know I pack a chain saw",
-      "translated": "I hope you know I pack a chain saw"
-    },
-    {
-      "time": 97.32,
-      "original": "I'll skin your ass raw",
-      "translated": "I'll skin your ass raw"
-    },
-    {
-      "time": 99.15,
-      "original": "And if my day keeps goin' this way",
-      "translated": "And if my day keeps goin' this way"
-    },
-    {
-      "time": 101.02,
-      "original": "I just might break somethin' tonight",
-      "translated": "I just might break somethin' tonight"
-    },
-    {
-      "time": 103.57,
-      "original": "I pack a chainsaw",
-      "translated": "I pack a chainsaw"
-    },
-    {
-      "time": 105.68,
-      "original": "I'll skin your ass raw",
-      "translated": "I'll skin your ass raw"
-    },
-    {
-      "time": 108.47,
-      "original": "And if my day keeps goin' this way",
-      "translated": "And if my day keeps goin' this way"
-    },
-    {
-      "time": 110.14,
-      "original": "I just might break somethin' tonight",
-      "translated": "I just might break somethin' tonight"
-    },
-    {
-      "time": 112.5,
-      "original": "I pack a chainsaw",
-      "translated": "I pack a chainsaw"
-    },
-    {
-      "time": 114.84,
-      "original": "I'll skin your ass raw",
-      "translated": "I'll skin your ass raw"
-    },
-    {
-      "time": 116.83,
-      "original": "And if my day keeps goin' this way",
-      "translated": "And if my day keeps goin' this way"
-    },
-    {
-      "time": 119.36,
-      "original": "I just might break your fuckin' face tonight",
-      "translated": "I just might break your fuckin' face tonight"
-    },
-    {
-      "time": 123.97,
-      "original": "Give me somethin' to break",
-      "translated": "Give me somethin' to break"
-    },
-    {
-      "time": 127.87,
-      "original": "Give me somethin' to break",
-      "translated": "Give me somethin' to break"
-    },
-    {
-      "time": 132.56,
-      "original": "Just give me somethin' to break",
-      "translated": "Just give me somethin' to break"
-    },
-    {
-      "time": 137.41,
-      "original": "How 'bout your fuckin' face?",
-      "translated": "How 'bout your fuckin' face?"
-    },
-    {
-      "time": 140.14,
-      "original": "I hope you know I pack a chainsaw (what?)",
-      "translated": "I hope you know I pack a chainsaw (what?)"
-    },
-    {
-      "time": 142.07,
-      "original": "A chainsaw (what?)",
-      "translated": "A chainsaw (what?)"
-    },
-    {
-      "time": 146.54,
-      "original": "A motherfuckin' chainsaw (what?)",
-      "translated": "A motherfuckin' chainsaw (what?)"
-    },
-    {
-      "time": 147.71,
-      "original": "So come and get it",
-      "translated": "So come and get it"
-    },
-    {
-      "time": 152.34,
-      "original": "It's all about the he says/she says bullshit",
-      "translated": "It's all about the he says/she says bullshit"
-    },
-    {
-      "time": 154.94,
-      "original": "I think you better quit lettin' shit slip",
-      "translated": "I think you better quit lettin' shit slip"
-    },
-    {
-      "time": 157.13,
-      "original": "Or you'll be leavin' with a fat lip",
-      "translated": "Or you'll be leavin' with a fat lip"
-    },
-    {
-      "time": 161.35,
-      "original": "It's all about the he says/she says bullshit",
-      "translated": "It's all about the he says/she says bullshit"
-    },
-    {
-      "time": 163.49,
-      "original": "I think you better quit talkin' that shit",
-      "translated": "I think you better quit talkin' that shit"
-    },
-    {
-      "time": 167.24,
-      "original": "Punk, so come and get it",
-      "translated": "Punk, so come and get it"
-    }
+    { "time": 4.54, "original": "It's just one of those days" },
+    { "time": 5.92, "original": "When you don't wanna wake up" },
+    { "time": 7.48, "original": "Everything is fucked" },
+    { "time": 8.71, "original": "Everybody sucks" },
+    { "time": 9.92, "original": "You don't really know why" },
+    { "time": 11.48, "original": "But you wanna justify" },
+    { "time": 13.15, "original": "Rippin' someone's head off" },
+    { "time": 14.6, "original": "No human contact" },
+    { "time": 16.28, "original": "And if you interact" },
+    { "time": 17.47, "original": "Your life is on contract" },
+    { "time": 20.17, "original": "Your best bet is to stay away, motherfucker!" },
+    { "time": 21.72, "original": "It's just one of those days" },
+    { "time": 25.82, "original": "It's all about the he says/she says bullshit" },
+    { "time": 29.18, "original": "I think you better quit lettin' shit slip" },
+    { "time": 30.7, "original": "Or you'll be leavin' with a fat lip" },
+    { "time": 35.31, "original": "It's all about the he says/she says bullshit" },
+    { "time": 38.3, "original": "I think you better quit talkin' that shit" },
+    { "time": 39.75, "original": "It's just one of those days" },
+    { "time": 40.99, "original": "Feelin' like a freight train" },
+    { "time": 42.29, "original": "First one to complain" },
+    { "time": 43.83, "original": "Leaves with a blood stain" },
+    { "time": 45.43, "original": "Damn right, I'm a maniac" },
+    { "time": 46.76, "original": "You better watch your back" },
+    { "time": 48.08, "original": "'Cause I'm fuckin' up your program" },
+    { "time": 49.71, "original": "And if you're stuck up" },
+    { "time": 50.88, "original": "You're just lucked up" },
+    { "time": 52.42, "original": "Next in line to get fucked up" },
+    { "time": 55.16, "original": "Your best bet is to stay away, motherfucker!" },
+    { "time": 56.95, "original": "It's just one of those days" },
+    { "time": 61.44, "original": "It's all about the he says/she says bullshit" },
+    { "time": 64.26, "original": "I think you better quit lettin' shit slip" },
+    { "time": 65.62, "original": "Or you'll be leavin' with a fat lip" },
+    { "time": 70, "original": "It's all about the he says/she says bullshit" },
+    { "time": 72.78, "original": "I think you better quit talkin' that shit" },
+    { "time": 74.51, "original": "Punk, so come and get it" },
+    { "time": 78.14, "original": "I feel like shit" },
+    { "time": 81.54, "original": "My suggestion is to keep your distance" },
+    { "time": 83.92, "original": "'Cause right now I'm dangerous" },
+    { "time": 86.16, "original": "We've all felt like shit" },
+    { "time": 91.65, "original": "And been treated like shit" },
+    { "time": 92.2, "original": "All those motherfuckers that want to step up" },
+    { "time": 94.48, "original": "I hope you know I pack a chain saw" },
+    { "time": 97.32, "original": "I'll skin your ass raw" },
+    { "time": 99.15, "original": "And if my day keeps goin' this way" },
+    { "time": 101.02, "original": "I just might break somethin' tonight" },
+    { "time": 103.57, "original": "I pack a chainsaw" },
+    { "time": 105.68, "original": "I'll skin your ass raw" },
+    { "time": 108.47, "original": "And if my day keeps goin' this way" },
+    { "time": 110.14, "original": "I just might break somethin' tonight" },
+    { "time": 112.5, "original": "I pack a chainsaw" },
+    { "time": 114.84, "original": "I'll skin your ass raw" },
+    { "time": 116.83, "original": "And if my day keeps goin' this way" },
+    { "time": 119.36, "original": "I just might break your fuckin' face tonight" },
+    { "time": 123.97, "original": "Give me somethin' to break" },
+    { "time": 127.87, "original": "Give me somethin' to break" },
+    { "time": 132.56, "original": "Just give me somethin' to break" },
+    { "time": 137.41, "original": "How 'bout your fuckin' face?" },
+    { "time": 140.14, "original": "I hope you know I pack a chainsaw (what?)" },
+    { "time": 142.07, "original": "A chainsaw (what?)" },
+    { "time": 146.54, "original": "A motherfuckin' chainsaw (what?)" },
+    { "time": 147.71, "original": "So come and get it" },
+    { "time": 152.34, "original": "It's all about the he says/she says bullshit" },
+    { "time": 154.94, "original": "I think you better quit lettin' shit slip" },
+    { "time": 157.13, "original": "Or you'll be leavin' with a fat lip" },
+    { "time": 161.35, "original": "It's all about the he says/she says bullshit" },
+    { "time": 163.49, "original": "I think you better quit talkin' that shit" },
+    { "time": 167.24, "original": "Punk, so come and get it" }
   ]
 }

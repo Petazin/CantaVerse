@@ -3,229 +3,61 @@
   "title": "Wait and Bleed",
   "artist": "Slipknot",
   "lyrics": [
-    {
-      "time": 4.47,
-      "text": "I've felt the hate rise up in me"
-    },
-    {
-      "time": 9.08,
-      "text": "Kneel down and clear the stone of leaves"
-    },
-    {
-      "time": 12.02,
-      "text": "I wander out where you can't see"
-    },
-    {
-      "time": 15.39,
-      "text": "Inside my shell, I wait and bleed"
-    },
-    {
-      "time": 18.23,
-      "text": "I've felt the hate rise up in me"
-    },
-    {
-      "time": 21.31,
-      "text": "Kneel down and clear the stone of leaves"
-    },
-    {
-      "time": 23.94,
-      "text": "I wander out where you can't see"
-    },
-    {
-      "time": 26.74,
-      "text": "Inside my shell, I wait and bleed"
-    },
-    {
-      "time": 31.87,
-      "text": "Goodbye!"
-    },
-    {
-      "time": 33.32,
-      "text": "I wipe it off on a tile"
-    },
-    {
-      "time": 34.86,
-      "text": "The light is brighter this time"
-    },
-    {
-      "time": 36.91,
-      "text": "Everything is 3D blasphemy"
-    },
-    {
-      "time": 38.48,
-      "text": "My eyes are red and gold"
-    },
-    {
-      "time": 40.26,
-      "text": "The hair is standing straight up"
-    },
-    {
-      "time": 42.39,
-      "text": "This is not the way I pictured me"
-    },
-    {
-      "time": 44.1,
-      "text": "I can't control my shakes"
-    },
-    {
-      "time": 45.57,
-      "text": "How the hell did I get here?"
-    },
-    {
-      "time": 47.7,
-      "text": "Something about this, so very wrong"
-    },
-    {
-      "time": 49.54,
-      "text": "I have to laugh out loud"
-    },
-    {
-      "time": 51.08,
-      "text": "I wish I didn't like this"
-    },
-    {
-      "time": 53.11,
-      "text": "Is it a dream or a memory?"
-    },
-    {
-      "time": 55.8,
-      "text": "I've felt the hate rise up in me"
-    },
-    {
-      "time": 58.71,
-      "text": "Kneel down and clear the stone of leaves"
-    },
-    {
-      "time": 60.94,
-      "text": "I wander out where you can't see"
-    },
-    {
-      "time": 63.7,
-      "text": "Inside my shell, I wait and bleed"
-    },
-    {
-      "time": 68.58,
-      "text": "Get outta my head 'cause I don't need this"
-    },
-    {
-      "time": 70.21,
-      "text": "Why didn't I see this?"
-    },
-    {
-      "time": 72.55,
-      "text": "Well, I'm a victim - Manchurian candidate"
-    },
-    {
-      "time": 76.22,
-      "text": "I have sinned by just making my mind up"
-    },
-    {
-      "time": 78.19,
-      "text": "And taking your breath away"
-    },
-    {
-      "time": 80.71,
-      "text": "I've felt the hate rise up in me"
-    },
-    {
-      "time": 83.38,
-      "text": "Kneel down and clear the stone of leaves"
-    },
-    {
-      "time": 85.95,
-      "text": "I wander out where you can't see"
-    },
-    {
-      "time": 88.59,
-      "text": "Inside my shell, I wait and bleed"
-    },
-    {
-      "time": 91.24,
-      "text": "I've felt the hate rise up in me"
-    },
-    {
-      "time": 93.86,
-      "text": "Kneel down and clear the stone of leaves"
-    },
-    {
-      "time": 96.22,
-      "text": "I wander out where you can't see"
-    },
-    {
-      "time": 102.46,
-      "text": "Inside my shell, I wait and bleed"
-    },
-    {
-      "time": 108.34,
-      "text": "Goodbye!"
-    },
-    {
-      "time": 110.28,
-      "text": "You haven't learned a thing"
-    },
-    {
-      "time": 111.64,
-      "text": "I haven't changed a thing"
-    },
-    {
-      "time": 112.97,
-      "text": "My flesh was in my bones"
-    },
-    {
-      "time": 114.32,
-      "text": "The pain was always free"
-    },
-    {
-      "time": 115.66,
-      "text": "You haven't learned a thing"
-    },
-    {
-      "time": 116.86,
-      "text": "I haven't changed a thing"
-    },
-    {
-      "time": 118.07,
-      "text": "My flesh was in my bones"
-    },
-    {
-      "time": 119.64,
-      "text": "The pain was always free"
-    },
-    {
-      "time": 122.42,
-      "text": "I've felt the hate rise up in me"
-    },
-    {
-      "time": 124.93,
-      "text": "Kneel down and clear the stone of leaves"
-    },
-    {
-      "time": 127.34,
-      "text": "I wander out where you can't see"
-    },
-    {
-      "time": 130.11,
-      "text": "Inside my shell, I wait and bleed"
-    },
-    {
-      "time": 132.97,
-      "text": "I've felt the hate rise up in me"
-    },
-    {
-      "time": 135.52,
-      "text": "Kneel down and clear the stone of leaves"
-    },
-    {
-      "time": 138.11,
-      "text": "I wander out where you can't see"
-    },
-    {
-      "time": 146.67,
-      "text": "Inside my shell, I wait and bleed"
-    },
-    {
-      "time": 151.9,
-      "text": "And it waits for you!"
-    }
+    { "time": 4.47, "original": "I've felt the hate rise up in me" },
+    { "time": 9.08, "original": "Kneel down and clear the stone of leaves" },
+    { "time": 12.02, "original": "I wander out where you can't see" },
+    { "time": 15.39, "original": "Inside my shell, I wait and bleed" },
+    { "time": 18.23, "original": "I've felt the hate rise up in me" },
+    { "time": 21.31, "original": "Kneel down and clear the stone of leaves" },
+    { "time": 23.94, "original": "I wander out where you can't see" },
+    { "time": 26.74, "original": "Inside my shell, I wait and bleed" },
+    { "time": 31.87, "original": "Goodbye!" },
+    { "time": 33.32, "original": "I wipe it off on a tile" },
+    { "time": 34.86, "original": "The light is brighter this time" },
+    { "time": 36.91, "original": "Everything is 3D blasphemy" },
+    { "time": 38.48, "original": "My eyes are red and gold" },
+    { "time": 40.26, "original": "The hair is standing straight up" },
+    { "time": 42.39, "original": "This is not the way I pictured me" },
+    { "time": 44.1, "original": "I can't control my shakes" },
+    { "time": 45.57, "original": "How the hell did I get here?" },
+    { "time": 47.7, "original": "Something about this, so very wrong" },
+    { "time": 49.54, "original": "I have to laugh out loud" },
+    { "time": 51.08, "original": "I wish I didn't like this" },
+    { "time": 53.11, "original": "Is it a dream or a memory?" },
+    { "time": 55.8, "original": "I've felt the hate rise up in me" },
+    { "time": 58.71, "original": "Kneel down and clear the stone of leaves" },
+    { "time": 60.94, "original": "I wander out where you can't see" },
+    { "time": 63.7, "original": "Inside my shell, I wait and bleed" },
+    { "time": 68.58, "original": "Get outta my head 'cause I don't need this" },
+    { "time": 70.21, "original": "Why didn't I see this?" },
+    { "time": 72.55, "original": "Well, I'm a victim - Manchurian candidate" },
+    { "time": 76.22, "original": "I have sinned by just making my mind up" },
+    { "time": 78.19, "original": "And taking your breath away" },
+    { "time": 80.71, "original": "I've felt the hate rise up in me" },
+    { "time": 83.38, "original": "Kneel down and clear the stone of leaves" },
+    { "time": 85.95, "original": "I wander out where you can't see" },
+    { "time": 88.59, "original": "Inside my shell, I wait and bleed" },
+    { "time": 91.24, "original": "I've felt the hate rise up in me" },
+    { "time": 93.86, "original": "Kneel down and clear the stone of leaves" },
+    { "time": 96.22, "original": "I wander out where you can't see" },
+    { "time": 102.46, "original": "Inside my shell, I wait and bleed" },
+    { "time": 108.34, "original": "Goodbye!" },
+    { "time": 110.28, "original": "You haven't learned a thing" },
+    { "time": 111.64, "original": "I haven't changed a thing" },
+    { "time": 112.97, "original": "My flesh was in my bones" },
+    { "time": 114.32, "original": "The pain was always free" },
+    { "time": 115.66, "original": "You haven't learned a thing" },
+    { "time": 116.86, "original": "I haven't changed a thing" },
+    { "time": 118.07, "original": "My flesh was in my bones" },
+    { "time": 119.64, "original": "The pain was always free" },
+    { "time": 122.42, "original": "I've felt the hate rise up in me" },
+    { "time": 124.93, "original": "Kneel down and clear the stone of leaves" },
+    { "time": 127.34, "original": "I wander out where you can't see" },
+    { "time": 130.11, "original": "Inside my shell, I wait and bleed" },
+    { "time": 132.97, "original": "I've felt the hate rise up in me" },
+    { "time": 135.52, "original": "Kneel down and clear the stone of leaves" },
+    { "time": 138.11, "original": "I wander out where you can't see" },
+    { "time": 146.67, "original": "Inside my shell, I wait and bleed" },
+    { "time": 151.9, "original": "And it waits for you!" }
   ]
 }

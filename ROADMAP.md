@@ -14,17 +14,15 @@
 
 - [x] **Ajuste de Sincronización:** Corregida la lógica de tiempo y añadido un control deslizable para ajuste manual.
 - [x] **Arreglos de Layout:** Solucionado el scroll horizontal, implementado auto-scroll vertical solo para las letras y conseguido un layout de página completa sin scroll principal.
-- [ ] **Mejoras de Estilo:** Aplicar un diseño visual más pulido a toda la aplicación (botones, inputs, colores).
+- [x] **Consistencia de Flujo:** Refactorizadas las páginas de Reproductor y Herramienta de Sincronización para un flujo de usuario lógico.
 
-## 🎯 Milestone 3: Funcionalidad de Traducción
+## 🎯 Milestone 3: Persistencia y Escalabilidad
 
-- [ ] **Integración de API de Traducción:** Implementar la traducción automática usando una API externa (ej. DeepL) con una clave proporcionada por el usuario.
-- [ ] **Fallback a Entrada Manual:** Si la API falla, permitir al usuario introducir la traducción manualmente.
-- [ ] **Actualizar UI del Reproductor:** Mostrar la letra original y la traducida lado a lado, con resaltado sincronizado.
+- [ ] **Implementar Base de Datos:** Investigar e implementar una solución de base de datos (ej. Vercel KV o MySQL hosteado) para el guardado permanente de canciones.
+- [ ] **Actualizar API:** La API guardará las nuevas traducciones en la base de datos para evitar llamadas repetidas.
 
-## 🚀 Milestone 4: Mejoras de UX y Funcionalidades Avanzadas
+## 🚀 Milestone 4: Funcionalidades Avanzadas
 
-- [ ] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones sincronizadas disponibles.
-- [ ] **Mejoras en el Reproductor:** Auto-scroll suave, clic para saltar a un punto del video.
-- [ ] **Base de Datos:** Investigar e implementar una base de datos para almacenar las canciones.
+- [ ] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones de la base de datos.
 - [ ] **Autenticación de Usuarios.**
+- [ ] **Rediseño Estético General.**
