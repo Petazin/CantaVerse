@@ -1,0 +1,20 @@
+{
+  "id": "de-musica-ligera",
+  "title": "De Música Ligera",
+  "artist": "Soda Stereo",
+  "lyrics": [
+    { "time": 16.0, "text": "Ella durmió, al calor de las masas" },
+    { "time": 20.0, "text": "Y yo desperté, queriendo soñarla" },
+    { "time": 24.0, "text": "Algún tiempo atrás, pensé en escribirle" },
+    { "time": 28.0, "text": "Y nunca sortié, las trampas del amor" },
+    { "time": 32.5, "text": "De aquel amor, de música ligera" },
+    { "time": 40.5, "text": "Nada nos libra, nada más queda" },
+    { "time": 48.5, "text": "No le enviaré, cenizas de rosas" },
+    { "time": 52.5, "text": "Ni pienso evitar, un roce secreto" },
+    { "time": 57.0, "text": "De aquel amor, de música ligera" },
+    { "time": 64.5, "text": "Nada nos libra, nada más queda" },
+    { "time": 97.5, "text": "De aquel amor, de música ligera" },
+    { "time": 105.0, "text": "Nada nos libra, nada más queda" },
+    { "time": 112.5, "text": "Nada más queda" }
+  ]
+}
