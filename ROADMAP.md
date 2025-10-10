@@ -16,36 +16,41 @@
 - [x] **Arreglos de Layout:** Solucionado el scroll horizontal, implementado auto-scroll vertical solo para las letras y conseguido un layout de página completa sin scroll principal.
 - [x] **Consistencia de Flujo:** Refactorizadas las páginas de Reproductor y Herramienta de Sincronización para un flujo de usuario lógico.
 
-## 🎯 Milestone 2.5: Corrección y Finalización de Funcionalidades
+## ✅ Milestone 2.5: Corrección y Finalización de Funcionalidades
 
-- [ ] **1. Corregir Visualización de Traducciones:**
-    - **Análisis del Problema:** Actualmente, la interfaz muestra el título "Traducción" pero no el contenido de la letra traducida.
+- [x] **1. Corregir Visualización de Traducciones:** Se verificó que la lógica para obtener y mostrar las traducciones desde la API funciona correctamente.
+
+## ✅ Milestone 3: Persistencia de Datos con Base de Datos
+
+- [x] **Implementar Base de Datos para Canciones:**
+    - **Objetivo:** Almacenar de forma permanente las canciones procesadas.
+    - **Tecnología Seleccionada:** Se utilizó una base de datos **MySQL en Railway** junto con **Prisma ORM**.
     - **Pasos de Implementación:**
-        1.  **Revisar `PlayerPage.tsx`:** Inspeccionar el componente para entender cómo se consume y renderiza el estado de la traducción.
-        2.  **Verificar Flujo de Datos:** Analizar el `useEffect` o hook encargado de llamar a la API de traducción (`/api/translate`) y asegurar que la respuesta se almacena correctamente en el estado del componente.
-        3.  **Inspeccionar la API `/api/translate.ts`:** Confirmar que la API procesa la petición, llama al servicio de traducción (DeepL) y devuelve la letra traducida en el formato esperado.
-        4.  **Validar Modelo de Datos:** Revisar si el modelo de datos de la canción en el frontend (`SongData` en `types.ts`) incluye un campo para la letra traducida y si este se está utilizando.
-        5.  **Renderizado Condicional:** Implementar la lógica para que la columna de traducción muestre un estado de "cargando" mientras se espera la respuesta de la API y el contenido una vez que se recibe.
+        1.  Se conectó a la base de datos existente y se configuró la variable de entorno `DATABASE_URL`.
+        2.  Se validó el `schema.prisma` para usar el proveedor `mysql`.
+        3.  Se sincronizó el esquema con la base de datos usando `prisma migrate`.
+        4.  Se implementó y depuró por completo el flujo de guardado manual desde la `SyncToolPage` a la base de datos a través de la API `POST /api/songs`.
 
-## 🎯 Milestone 3: Persistencia de Datos con Base de Datos
+## 🎯 Milestone 3.5: Añadir Traducción al Flujo de Guardado
 
-- [ ] **Implementar Base de Datos para Canciones:**
-    - **Objetivo:** Almacenar de forma permanente las canciones procesadas (letra original, traducción y tiempos) para optimizar el rendimiento y reducir costos de API.
-    - **Tecnología Seleccionada:** Se utilizará **Vercel Postgres** junto con **Prisma ORM**.
+- [ ] **Añadir Traducción al Proceso de Sincronización:**
+    - **Objetivo:** Permitir la traducción de la letra durante el proceso de sincronización para que se guarde en la base de datos junto con la letra original y los tiempos.
     - **Pasos de Implementación:**
-        1.  **Configuración de la Base de Datos:**
-            - Crear un nuevo proyecto de Vercel Postgres.
-            - Obtener la URL de conexión (`POSTGRES_URL`).
-            - Configurar las variables de entorno en Vercel y localmente (`.env`).
-        2.  **Definición del Esquema de Datos:**
-            - Actualizar `prisma/schema.prisma` para definir un modelo `Song` con campos para `youtubeId`, `artist`, `title`, `lyrics` (JSON), y `translatedLyrics` (JSON).
-        3.  **Migración de la Base de Datos:**
-            - Ejecutar `npx prisma migrate dev --name init-song-model` para crear la tabla en la base de datos.
-        4.  **Actualización de la Lógica de la API:**
-            - Modificar el endpoint `api/songs/[youtubeId].ts` para que primero consulte la base de datos. Si la canción no existe, la procesa, la guarda en la base de datos y luego la devuelve.
+        1.  Añadir un botón "Traducir" a `SyncToolPage.tsx`.
+        2.  Implementar la llamada a la API `/api/translate` para obtener la letra traducida.
+        3.  Añadir un nuevo estado y una nueva columna para mostrar la letra traducida en la `SyncToolPage`.
+        4.  Modificar la función `getFinalJson` para incluir la letra traducida en el objeto que se envía a la API de guardado.
 
 ## 🚀 Milestone 4: Funcionalidades Avanzadas
 
+- [ ] **Automatizar Obtención de Letras:**
+    - **Objetivo:** Implementar una función en el backend que, dado un `youtubeId`, busque automáticamente la letra de la canción (ej. desde los subtítulos de YouTube) si esta no existe en la base de datos.
+    - **Lógica a implementar en `GET /api/songs/[youtubeId].ts`:**
+        - Si la canción no se encuentra en la base de datos:
+            1.  Implementar la lógica de fetching en `api/fetch-lyrics.ts`.
+            2.  Llamar a esta nueva función para obtener la letra.
+            3.  Guardar la nueva canción y su letra en la base de datos.
+            4.  Devolver la canción al usuario.
 - [ ] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones de la base de datos.
 - [ ] **Autenticación de Usuarios.**
 - [ ] **Rediseño Estético General.**

@@ -18,6 +18,11 @@ export default function SyncToolPage() {
   const [syncedLyrics, setSyncedLyrics] = useState<FinalLyricLine[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Estados para el proceso de guardado
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   const playerRef = useRef<YouTubePlayer | null>(null);
   const previewLineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
@@ -39,7 +44,6 @@ export default function SyncToolPage() {
     setCurrentIndex(prev => prev + 1);
   };
 
-  // ... (Efectos de teclado y scroll sin cambios) ...
   useEffect(() => {
     if (currentIndex >= 0 && previewLineRefs.current[currentIndex]) {
       previewLineRefs.current[currentIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -52,8 +56,6 @@ export default function SyncToolPage() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleMarkTime]);
 
-  const playerOptions = { height: '390', width: '640' };
-
   const getFinalJson = () => {
     if (!videoId || syncedLyrics.length !== lines.length || lines.length === 0) return null;
     const videoData = playerRef.current?.getVideoData();
@@ -61,10 +63,45 @@ export default function SyncToolPage() {
     const parts = fullTitle.replace(/\s*\(.*?\)|\s*\[.*?\]/g, '').trim().split(/\s*[-–—]\s*/);
     const artist = parts.length >= 2 ? parts[0].trim() : 'Artista Desconocido';
     const title = parts.length >= 2 ? parts[1].trim() : fullTitle;
-    return { videoId, title, artist, lyrics: syncedLyrics };
+    // Por ahora, no tenemos la letra traducida en esta herramienta.
+    return { youtubeId: videoId, title, artist, lyrics: syncedLyrics, translatedLyrics: null };
   };
 
   const finalJson = getFinalJson();
+
+  const handleSave = async () => {
+    if (!finalJson) return;
+
+    setIsSaving(true);
+    setSaveSuccess(null);
+    setSaveError(null);
+
+    console.log('Enviando al servidor:', finalJson);
+    try {
+      const response = await fetch('/api/songs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finalJson),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Falló la petición de guardado');
+      }
+
+      const result = await response.json();
+      console.log('Guardado con éxito:', result);
+      setSaveSuccess(`¡Canción "${finalJson.title}" guardada con éxito!`);
+
+    } catch (error) {
+      console.error('Error al guardar:', error);
+      setSaveError((error as Error).message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const playerOptions = { height: '390', width: '640' };
 
   return (
     <div className="page-container">
@@ -87,6 +124,11 @@ export default function SyncToolPage() {
           <h3>Resultado JSON</h3>
           <textarea readOnly value={finalJson ? JSON.stringify(finalJson, null, 2) : ''} style={{height: '100%'}}/>
           <button onClick={() => finalJson && navigator.clipboard.writeText(JSON.stringify(finalJson, null, 2))} disabled={!finalJson}>Copiar</button>
+          <button onClick={handleSave} disabled={!finalJson || isSaving}>
+            {isSaving ? 'Guardando...' : 'Guardar en Base de Datos'}
+          </button>
+          {saveSuccess && <p style={{ color: 'green' }}>{saveSuccess}</p>}
+          {saveError && <p style={{ color: 'red' }}>Error: {saveError}</p>}
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -11,6 +10,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Importa tus funciones API aquí
 import translateHandler from '../api/translate.ts';
+import songsIndexHandler from '../api/songs/index.ts';
+import songsYoutubeIdHandler from '../api/songs/[youtubeId].ts';
 
 const app = express();
 const PORT = 3000;
@@ -41,15 +42,15 @@ const vercelAdapter = (handler: (req: VercelRequest, res: VercelResponse) => voi
 
     // Sobrescribir los métodos para la compatibilidad con Vercel
     vercelRes.status = (statusCode: number) => {
-      originalStatus(statusCode); // Llamar al original
+      originalStatus(statusCode);
       return vercelRes;
     };
     vercelRes.json = (body: any) => {
-      originalJson(body); // Llamar al original
+      originalJson(body);
       return vercelRes;
     };
     vercelRes.send = (body: any) => {
-      originalSend(body); // Llamar al original
+      originalSend(body);
       return vercelRes;
     };
 
@@ -66,10 +67,19 @@ const vercelAdapter = (handler: (req: VercelRequest, res: VercelResponse) => voi
 
 // --- Rutas de la API ---
 console.log('[api-runner] Configurando rutas de la API...');
+
+// Ruta para /api/translate
 app.post('/api/translate', vercelAdapter(translateHandler));
 console.log('[api-runner]   -> POST /api/translate registrada.');
 
-// Aquí se pueden añadir otras rutas en el futuro
+// Ruta para /api/songs (maneja GET y POST)
+app.all('/api/songs', vercelAdapter(songsIndexHandler));
+console.log('[api-runner]   -> ALL /api/songs registrada.');
+
+// Ruta para /api/songs/:youtubeId (maneja GET por ID)
+app.all('/api/songs/:youtubeId', vercelAdapter(songsYoutubeIdHandler));
+console.log('[api-runner]   -> ALL /api/songs/:youtubeId registrada.');
+
 
 app.listen(PORT, () => {
   console.log(`[api-runner] Servidor de API local escuchando en http://localhost:${PORT}`);
