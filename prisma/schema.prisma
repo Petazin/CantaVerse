@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//======================================
+//       Modelos de CantaVerse
+//======================================
+
+model Song {
+  id               Int               @id @default(autoincrement())
+  youtubeId        String            @unique
+  title            String
+  artist           String
+  synchronizations Synchronization[]
+}
+
+model Synchronization {
+  id               Int     @id @default(autoincrement())
+  lyrics           Json
+  translatedLyrics Json?
+  song             Song    @relation(fields: [songId], references: [id], onDelete: Cascade)
+  songId           Int
+}

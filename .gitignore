@@ -28,3 +28,10 @@ dist-ssr
 # Environment variables
 .env
 .env.*
+
+# Explicitly un-ignore critical project files
+!/api
+!/prisma
+!/src/lib
+!/vercel.json
+!/_server

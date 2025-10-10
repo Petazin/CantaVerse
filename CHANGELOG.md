@@ -8,6 +8,9 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 - Implementación de un sistema de persistencia de datos (base de datos).
 - Rediseño estético general de la interfaz.
 
+### Security
+- Se han actualizado las dependencias para resolver 4 vulnerabilidades (2 altas, 2 moderadas) reportadas por `npm audit`. Se utilizó la propiedad `overrides` de `package.json` para forzar versiones seguras de `esbuild`, `path-to-regexp` y `undici`.
+
 ### Chore
 - **Actualización del Índice de Canciones:** Se han añadido las canciones `deftones-change-in-the-house-of-flies` y `gojira-silvera` al índice de datos para que aparezcan en la aplicación.
 

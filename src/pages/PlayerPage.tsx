@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import YouTube from 'react-youtube';
-import type { YouTubePlayer } from 'youtube-player/dist/types';
+import type { YouTubePlayer } from 'youtube-player';
 import { songLibrary } from '../data';
 
 // Tipos de datos
@@ -23,6 +23,7 @@ function PlayerPage() {
   // Estados
   const [translatedLines, setTranslatedLines] = useState<string[] | null>(null);
   const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
+  const [translationError, setTranslationError] = useState<string | null>(null);
   const [activeLineIndex, setActiveLineIndex] = useState(-1);
   const [syncOffset, setSyncOffset] = useState(0.3);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -37,18 +38,37 @@ function PlayerPage() {
 
     const translate = async () => {
       setIsLoadingTranslation(true);
+      setTranslationError(null);
       try {
         const originalLines = songData.lyrics.map(line => line.original);
+        
+        console.log('%c[DEBUG] 1. Preparando para enviar:', 'color: yellow;', { lines: originalLines });
+
         const response = await fetch('/api/translate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ lines: originalLines, targetLang: 'es' }),
         });
-        if (!response.ok) throw new Error('La traducción falló');
+
+        console.log('%c[DEBUG] 2. Respuesta recibida del servidor:', 'color: cyan;', response);
+        console.log(`%c[DEBUG] 2a. Estado de la respuesta: ${response.status} ${response.statusText}`, 'color: cyan;');
+
+        if (!response.ok) {
+          console.error('[DEBUG] 2b. La respuesta no fue exitosa (no es status 2xx).');
+          // Intentamos leer el cuerpo como texto para ver el error real
+          const errorText = await response.text();
+          console.error(`[DEBUG] 2c. Cuerpo del error (texto):`, errorText);
+          throw new Error(errorText || 'La traducción falló');
+        }
+
         const data = await response.json();
+        
+        console.log('%c[DEBUG] 3. Datos JSON parseados exitosamente:', 'color: lightgreen;', data);
+
         setTranslatedLines(data.translatedLines);
       } catch (error) {
-        console.error(error);
+        console.error('%c[DEBUG] 4. Ocurrió un error en el bloque try/catch:', 'color: red;', error);
+        setTranslationError((error as Error).message);
         setTranslatedLines(null); // No mostrar nada si falla
       } finally {
         setIsLoadingTranslation(false);
@@ -110,7 +130,8 @@ function PlayerPage() {
         </div>
         <div className="lyrics-column">
           <h3>Traducción {isLoadingTranslation ? '(Cargando...)' : ''}</h3>
-          {translatedLines && songData.lyrics.map((line, index) => (
+          {translationError && <p className="error-message">Error: {translationError}</p>}
+          {translatedLines && !translationError && songData.lyrics.map((line, index) => (
             <p key={index} ref={el => translatedLineRefs.current[index] = el} className={index === activeLineIndex ? 'active' : ''}>
               {translatedLines[index] || ''}
             </p>

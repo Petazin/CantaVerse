@@ -116,3 +116,12 @@ button {
 }
 
 /* ... (otros estilos) ... */
+
+.error-message {
+  color: #ff4d4d;
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
