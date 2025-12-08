@@ -123,11 +123,7 @@ export default function SyncToolPage() {
 
     // Auto-Reset: Si empezamos a marcar desde el principio (index 0) y ya había datos (ej. dummy fetch),
     // limpiamos el array para empezar una sincronización manual limpia.
-    let currentSyncedLyrics = syncedLyrics;
-    if (currentIndex === 0 && syncedLyrics.length > 0) {
-      currentSyncedLyrics = [];
-      setSyncedLyrics([]);
-    }
+
 
     const newSyncedLine: FinalLyricLine = {
       time: parseFloat(currentTime.toFixed(2)),
