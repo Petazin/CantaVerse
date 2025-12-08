@@ -31,9 +31,9 @@
         3.  Se sincronizó el esquema con la base de datos usando `prisma migrate`.
         4.  Se implementó y depuró por completo el flujo de guardado manual desde la `SyncToolPage` a la base de datos a través de la API `POST /api/songs`.
 
-## 🎯 Milestone 3.5: Añadir Traducción al Flujo de Guardado
+## ✅ Milestone 3.5: Añadir Traducción al Flujo de Guardado
 
-- [ ] **Añadir Traducción al Proceso de Sincronización:**
+- [x] **Añadir Traducción al Proceso de Sincronización:**
     - **Objetivo:** Permitir la traducción de la letra durante el proceso de sincronización para que se guarde en la base de datos junto con la letra original y los tiempos.
     - **Pasos de Implementación:**
         1.  Añadir un botón "Traducir" a `SyncToolPage.tsx`.
@@ -41,16 +41,27 @@
         3.  Añadir un nuevo estado y una nueva columna para mostrar la letra traducida en la `SyncToolPage`.
         4.  Modificar la función `getFinalJson` para incluir la letra traducida en el objeto que se envía a la API de guardado.
 
-## 🚀 Milestone 4: Funcionalidades Avanzadas
+## ✅ Milestone 4: Funcionalidades Avanzadas
 
-- [ ] **Automatizar Obtención de Letras:**
+- [x] **Automatizar Obtención de Letras:**
     - **Objetivo:** Implementar una función en el backend que, dado un `youtubeId`, busque automáticamente la letra de la canción (ej. desde los subtítulos de YouTube) si esta no existe en la base de datos.
     - **Lógica a implementar en `GET /api/songs/[youtubeId].ts`:**
         - Si la canción no se encuentra en la base de datos:
             1.  Implementar la lógica de fetching en `api/fetch-lyrics.ts`.
             2.  Llamar a esta nueva función para obtener la letra.
-            3.  Guardar la nueva canción y su letra en la base de datos.
-            4.  Devolver la canción al usuario.
+            3.  Devolver la canción en modo "Vista Previa" (sin guardar automáticamente).
+    - **Fuentes Adicionales (Fallback):**
+        - Implementado scraper para **AZLyrics** con soporte de Puppeteer y búsqueda de respaldo en Google.
+        - Lógica de fallback: YouTube Captions -> AZLyrics (Directo) -> Google Search (AZLyrics) -> Retorno vacío.
+
+## 🛠️ Milestone 4.5: Edición y Corrección
+- [ ] **Modo de Edición de Sincronización:**
+    - **Objetivo:** Permitir al usuario corregir una sincronización existente (malos tiempos o letra incorrecta).
+    - **Funcionalidades:**
+        - Cargar una configuración guardada en la herramienta de sincronización.
+        - **Ajuste de Tiempos:** Poder modificar el tiempo de cada línea individualmente o aplicar un offset global.
+        - **Edición de Texto:** Poder corregir erratas en la letra original o en la traducción sin perder los tiempos.
+        - "Resincronizar" secciones específicas.
 - [ ] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones de la base de datos.
 - [ ] **Autenticación de Usuarios.**
 - [ ] **Rediseño Estético General.**

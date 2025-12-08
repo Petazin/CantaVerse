@@ -18,6 +18,10 @@ const PORT = 3000;
 
 // Middlewares
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(`[api-runner] Request: ${req.method} ${req.url}`);
+  next();
+});
 app.use((_req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -45,11 +49,11 @@ const vercelAdapter = (handler: (req: VercelRequest, res: VercelResponse) => voi
       originalStatus(statusCode);
       return vercelRes;
     };
-    vercelRes.json = (body: any) => {
+    vercelRes.json = (body: unknown) => {
       originalJson(body);
       return vercelRes;
     };
-    vercelRes.send = (body: any) => {
+    vercelRes.send = (body: unknown) => {
       originalSend(body);
       return vercelRes;
     };

@@ -1,93 +1,82 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import YouTube from 'react-youtube';
-import type { YouTubePlayer } from 'youtube-player';
-import { songLibrary } from '../data';
 
-// Tipos de datos
+// Tipos de datos según la respuesta de la API
 interface LyricLine {
   time: number;
-  original: string;
+  text: string; // El backend devuelve 'text' para las líneas traducidas
 }
-interface Song {
-  videoId: string;
+
+interface SongData {
+  id: number;
+  youtubeId: string;
   title: string;
   artist: string;
-  lyrics: LyricLine[];
+  lyrics: { time: number; original: string }[]; // La letra original tiene una estructura ligeramente diferente
+  translatedLyrics: LyricLine[] | null;
 }
 
 function PlayerPage() {
   const { songId } = useParams<{ songId: string }>();
-  const songData = songLibrary.find(song => song.videoId === songId) as Song | undefined;
 
-  // Estados
-  const [translatedLines, setTranslatedLines] = useState<string[] | null>(null);
-  const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
-  const [translationError, setTranslationError] = useState<string | null>(null);
+  // Estados para los datos de la canción, carga y error
+  const [songData, setSongData] = useState<SongData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Estados para la reproducción y sincronización
   const [activeLineIndex, setActiveLineIndex] = useState(-1);
   const [syncOffset, setSyncOffset] = useState(0.3);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const playerRef = useRef<YouTubePlayer | null>(null);
+  const playerRef = useRef<any | null>(null);
   const originalLineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
   const translatedLineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
-  // Efecto para traducir la letra
+  // Efecto para obtener los datos de la canción desde la API
   useEffect(() => {
-    if (!songData) return;
+    if (!songId) {
+      setError('No se proporcionó un ID de canción.');
+      setIsLoading(false);
+      return;
+    }
 
-    const translate = async () => {
-      setIsLoadingTranslation(true);
-      setTranslationError(null);
+    const fetchSongData = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
-        const originalLines = songData.lyrics.map(line => line.original);
-        
-        console.log('%c[DEBUG] 1. Preparando para enviar:', 'color: yellow;', { lines: originalLines });
-
-        const response = await fetch('/api/translate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lines: originalLines, targetLang: 'es' }),
-        });
-
-        console.log('%c[DEBUG] 2. Respuesta recibida del servidor:', 'color: cyan;', response);
-        console.log(`%c[DEBUG] 2a. Estado de la respuesta: ${response.status} ${response.statusText}`, 'color: cyan;');
-
+        const response = await fetch(`/api/songs/${songId}`);
         if (!response.ok) {
-          console.error('[DEBUG] 2b. La respuesta no fue exitosa (no es status 2xx).');
-          // Intentamos leer el cuerpo como texto para ver el error real
-          const errorText = await response.text();
-          console.error(`[DEBUG] 2c. Cuerpo del error (texto):`, errorText);
-          throw new Error(errorText || 'La traducción falló');
+          const errorData = await response.json();
+          throw new Error(errorData.error || `Error al cargar la canción: ${response.statusText}`);
         }
-
-        const data = await response.json();
-        
-        console.log('%c[DEBUG] 3. Datos JSON parseados exitosamente:', 'color: lightgreen;', data);
-
-        setTranslatedLines(data.translatedLines);
-      } catch (error) {
-        console.error('%c[DEBUG] 4. Ocurrió un error en el bloque try/catch:', 'color: red;', error);
-        setTranslationError((error as Error).message);
-        setTranslatedLines(null); // No mostrar nada si falla
+        const data: SongData = await response.json();
+        setSongData(data);
+      } catch (err) {
+        setError((err as Error).message);
       } finally {
-        setIsLoadingTranslation(false);
+        setIsLoading(false);
       }
     };
-    translate();
-  }, [songData]);
 
-  // ... (Lógica de auto-scroll y sincronización sin cambios) ...
+    fetchSongData();
+  }, [songId]);
+
+  // Efecto para el auto-scroll de las letras
   useEffect(() => {
     if (activeLineIndex < 0) return;
     const scrollOptions: ScrollIntoViewOptions = { behavior: 'smooth', block: 'center' };
     originalLineRefs.current[activeLineIndex]?.scrollIntoView(scrollOptions);
-    translatedLineRefs.current[activeLineIndex]?.scrollIntoView(scrollOptions);
-  }, [activeLineIndex]);
+    if (songData?.translatedLyrics) {
+      translatedLineRefs.current[activeLineIndex]?.scrollIntoView(scrollOptions);
+    }
+  }, [activeLineIndex, songData]);
 
-  const onPlayerReady = (event: { target: YouTubePlayer }) => { playerRef.current = event.target; };
+  const onPlayerReady = (event: { target: any }) => { playerRef.current = event.target; };
   const onPlayerStateChange = (event: { data: number }) => { setIsPlaying(event.data === 1); };
 
+  // Efecto para la sincronización de las letras con el tiempo del video
   useEffect(() => {
     if (!isPlaying || !songData) return;
     const intervalId = setInterval(() => {
@@ -105,6 +94,8 @@ function PlayerPage() {
     return () => clearInterval(intervalId);
   }, [isPlaying, syncOffset, songData]);
 
+  if (isLoading) return <div>Cargando canción...</div>;
+  if (error) return <div className="error-message">Error: {error}</div>;
   if (!songData) return <div>Canción no encontrada.</div>;
 
   const playerOptions = { height: '390', width: '640' };
@@ -113,30 +104,31 @@ function PlayerPage() {
     <div className="page-container">
       <div className="player-area">
         <h2>{songData.artist} - {songData.title}</h2>
-        <YouTube videoId={songData.videoId} opts={playerOptions} onReady={onPlayerReady} onStateChange={onPlayerStateChange} />
+        <YouTube videoId={songData.youtubeId} opts={playerOptions} onReady={onPlayerReady} onStateChange={onPlayerStateChange} />
         <div className="sync-control">
-          <label htmlFor="sync-offset">Ajuste: {syncOffset.toFixed(2)} s</label>
+          <label htmlFor="sync-offset">Ajuste de Sincronización: {syncOffset.toFixed(2)} s</label>
           <input type="range" id="sync-offset" min="-1" max="3" step="0.05" value={syncOffset} onChange={(e) => setSyncOffset(parseFloat(e.target.value))} />
         </div>
       </div>
-      <div className="lyrics-display">
+      <div className="lyrics-display" style={{ gridTemplateColumns: songData.translatedLyrics ? '1fr 1fr' : '1fr' }}>
         <div className="lyrics-column">
           <h3>Original</h3>
           {songData.lyrics.map((line, index) => (
-            <p key={index} ref={el => originalLineRefs.current[index] = el} className={index === activeLineIndex ? 'active' : ''}>
+            <p key={index} ref={el => { originalLineRefs.current[index] = el; }} className={index === activeLineIndex ? 'active' : ''}>
               {line.original}
             </p>
           ))}
         </div>
-        <div className="lyrics-column">
-          <h3>Traducción {isLoadingTranslation ? '(Cargando...)' : ''}</h3>
-          {translationError && <p className="error-message">Error: {translationError}</p>}
-          {translatedLines && !translationError && songData.lyrics.map((line, index) => (
-            <p key={index} ref={el => translatedLineRefs.current[index] = el} className={index === activeLineIndex ? 'active' : ''}>
-              {translatedLines[index] || ''}
-            </p>
-          ))}
-        </div>
+        {songData.translatedLyrics && (
+          <div className="lyrics-column">
+            <h3>Traducción</h3>
+            {songData.translatedLyrics.map((line, index) => (
+              <p key={index} ref={el => { translatedLineRefs.current[index] = el; }} className={index === activeLineIndex ? 'active' : ''}>
+                {line.text}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

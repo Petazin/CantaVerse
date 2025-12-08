@@ -14,6 +14,27 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 ### Chore
 - **Actualización del Índice de Canciones:** Se han añadido las canciones `deftones-change-in-the-house-of-flies` y `gojira-silvera` al índice de datos para que aparezcan en la aplicación.
 
+### Fixed
+- **Guardado de Traducciones:** Se corrigió un error en la herramienta de sincronización donde las traducciones realizadas después de marcar los tiempos no se guardaban en el JSON final. Ahora el resultado se actualiza dinámicamente.
+- **Integración API Traducción:** Se ajustó el formato de envío de datos al backend para coincidir con la estructura esperada (array de líneas).
+
+## [0.5.0] - 2025-12-08
+
+### Added
+- **Automatización de Letras (Auto-Fetch):** Implementado sistema robusto para obtener letras automáticamente desde YouTube Captions y AZLyrics.
+- **Soporte Puppeteer:** Integrado Puppeteer para evadir protecciones anti-scraping en AZLyrics.
+- **Fallback a Google Search:** Si la URL directa falla o el nombre del canal es ambiguo, el sistema busca en Google el enlace correcto de AZLyrics.
+- **Modo Vista Previa:** Las letras obtenidas no se guardan automáticamente. Se muestran en el frontend para revisión antes de persistir.
+- **Mejoras UX Sincronización:** 
+    - Botón manual "Buscar Letra Automática".
+    - Eliminación de alertas intrusivas.
+    - Sincronización de scroll entre columna original y traducción.
+    - Limpieza automática de datos al iniciar una nueva sincronización.
+
+### Fixed
+- **Extracción de Metadatos:** Corregida la lógica para limpiar sufijos como " - Topic" de los nombres de canales de YouTube, mejorando la tasa de éxito en la búsqueda de letras.
+- **Persistencia de Artista:** El frontend ahora respeta y guarda el nombre del artista detectado por el backend, en lugar de sobreescribirlo con el título del video.
+
 ## [0.4.0] - 2025-09-24
 
 ### Added

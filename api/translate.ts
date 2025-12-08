@@ -1,6 +1,22 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import * as deepl from 'deepl-node';
 
+export async function translateTextLogic(lines: string[], targetLang: string = 'es'): Promise<string[]> {
+  const apiKey = process.env.DEEPL_API_KEY;
+  if (!apiKey) {
+    throw new Error('La clave de API de DeepL no está configurada en el servidor.');
+  }
+
+  const translator = new deepl.Translator(apiKey);
+  const textToTranslate = lines.join('\n');
+
+  // Cast targetLang to TargetLanguageCode. 
+  // Note: ideally we should validate if targetLang is valid, but 'es' is safe default.
+  const result = await translator.translateText(textToTranslate, null, targetLang as deepl.TargetLanguageCode);
+
+  return result.text.split('\n');
+}
+
 export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
@@ -11,23 +27,13 @@ export default async function handler(
   }
 
   const { lines, targetLang = 'es' } = request.body;
-  const apiKey = process.env.DEEPL_API_KEY;
 
-  if (!apiKey) {
-    return response.status(500).json({ error: 'La clave de API de DeepL no está configurada en el servidor.' });
-  }
   if (!lines || !Array.isArray(lines) || lines.length === 0) {
     return response.status(400).json({ error: 'El cuerpo de la petición debe incluir un array de \'lines\'.' });
   }
 
   try {
-    const translator = new deepl.Translator(apiKey);
-    const textToTranslate = lines.join('\n');
-    
-    const result = await translator.translateText(textToTranslate, null, targetLang as deepl.TargetLanguageCode);
-    
-    const translatedLines = result.text.split('\n');
-
+    const translatedLines = await translateTextLogic(lines, targetLang);
     return response.status(200).json({ translatedLines });
 
   } catch (error) {
