@@ -18,6 +18,13 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 - **Guardado de Traducciones:** Se corrigió un error en la herramienta de sincronización donde las traducciones realizadas después de marcar los tiempos no se guardaban en el JSON final. Ahora el resultado se actualiza dinámicamente.
 - **Integración API Traducción:** Se ajustó el formato de envío de datos al backend para coincidir con la estructura esperada (array de líneas).
 
+## [0.5.1] - 2025-12-08
+
+### Changed
+- **Refactor UI Sincronización:** Eliminada la visualización del JSON crudo por una interfaz más limpia. Los tiempos ahora se muestran en línea junto a la letra original.
+- **Indicadores de Progreso:** El botón "Guardar" ahora funciona como un semáforo (Rojo=Vacío, Amarillo=En Progreso, Verde=Completo) y muestra el conteo de líneas sincronizadas.
+- **Lógica de Inicialización:** Al importar letras automáticamente, la sincronización se inicia explícitamente vacía para evitar que el sistema crea que ya está lista para guardar.
+
 ## [0.5.0] - 2025-12-08
 
 ### Added

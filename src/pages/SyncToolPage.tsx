@@ -51,11 +51,17 @@ export default function SyncToolPage() {
           setLines(loadedLines);
           setRawLyrics(loadedLines.join('\n'));
 
-          const loadedSynced = data.lyrics.map((l: any) => ({
-            time: l.time,
-            original: l.text || l.original || '',
-          }));
-          setSyncedLyrics(loadedSynced);
+          // Si es una vista previa (auto-fetch), NO cargamos la sincronización "dummy" (tiempos en 0),
+          // queremos empezar de cero. Si es una canción guardada, sí la cargamos para editar.
+          if (data.isPreview) {
+            setSyncedLyrics([]);
+          } else {
+            const loadedSynced = data.lyrics.map((l: any) => ({
+              time: l.time,
+              original: l.text || l.original || '',
+            }));
+            setSyncedLyrics(loadedSynced);
+          }
 
           if (data.translatedLyrics && Array.isArray(data.translatedLyrics)) {
             const transLines = data.translatedLyrics.map((l: any) => l.text || '');
@@ -232,37 +238,70 @@ export default function SyncToolPage() {
           <button onClick={handleLoadLyrics}>Cargar Manualmente</button>
           <button onClick={fetchLyrics}>🔍 Buscar Letra Automática</button>
         </div>
-        <button onClick={handleTranslate} disabled={isTranslating || lines.length === 0}>
-          {isTranslating ? 'Traduciendo...' : 'Traducir Letra'}
-        </button>
-        <button onClick={handleMarkTime}>Marcar Tiempo (Espacio)</button>
-      </div>
-      <div className="lyrics-display" style={{ gridTemplateColumns: translatedLines.length > 0 ? '1fr 1fr 1fr' : '1fr 1fr' }}>
-        <div className="lyrics-column">
-          <h3>Vista Previa (Original)</h3>
-          {lines.map((line, index) => (
-            <p key={index} ref={el => { previewLineRefs.current[index] = el; }} className={index === currentIndex ? 'active' : ''}>{line}</p>
-          ))}
-        </div>
-        {translatedLines.length > 0 && (
-          <div className="lyrics-column">
-            <h3>Vista Previa (Traducida)</h3>
-            {translatedLines.map((line, index) => (
-              <p key={index} ref={el => { previewTransLineRefs.current[index] = el; }} className={index === currentIndex ? 'active' : ''}>{line || '...'}</p>
-            ))}
-          </div>
-        )}
-        <div className="lyrics-column">
-          <h3>Resultado JSON</h3>
-          <textarea readOnly value={finalJson ? JSON.stringify(finalJson, null, 2) : ''} style={{ height: '100%' }} />
-          <button onClick={() => finalJson && navigator.clipboard.writeText(JSON.stringify(finalJson, null, 2))} disabled={!finalJson}>Copiar</button>
-          <button onClick={handleSave} disabled={!finalJson || isSaving}>
-            {isSaving ? 'Guardando...' : 'Guardar en Base de Datos'}
+
+        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+          <button onClick={handleTranslate} disabled={isTranslating || lines.length === 0}>
+            {isTranslating ? 'Traduciendo...' : 'Traducir Letra'}
           </button>
-          {saveSuccess && <p style={{ color: 'green' }}>{saveSuccess}</p>}
-          {saveError && <p style={{ color: 'red' }}>Error: {saveError}</p>}
+          <button onClick={handleMarkTime} disabled={currentIndex >= lines.length}>
+            Marcar Tiempo (Espacio)
+          </button>
+          {/* El botón de guardar ahora vive aquí y solo se activa al final */}
+          <button
+            onClick={handleSave}
+            disabled={lines.length === 0 || syncedLyrics.length !== lines.length || isSaving}
+            title={syncedLyrics.length !== lines.length ? `Progreso: ${syncedLyrics.length}/${lines.length}` : "Listo para guardar"}
+            style={{
+              backgroundColor: lines.length === 0 ? undefined : (syncedLyrics.length === lines.length
+                ? '#4CAF50' // Green
+                : syncedLyrics.length > 0
+                  ? '#FFC107' // Yellow
+                  : '#F44336'), // Red
+              color: (syncedLyrics.length > 0 && syncedLyrics.length < lines.length) ? 'black' : 'white',
+              opacity: 1
+            }}
+          >
+            {isSaving ? 'Guardando...' : 'Guardar'}
+          </button>
         </div>
+        {saveSuccess && <p style={{ color: 'green', marginTop: '5px' }}>{saveSuccess}</p>}
+        {saveError && <p style={{ color: 'red', marginTop: '5px' }}>Error: {saveError}</p>}
       </div>
+
+      {/* Grid ajustado: Si no hay traducción, una sola columna. Si hay, dos columnas. */}
+      {lines.length > 0 && (
+        <div className="lyrics-display" style={{ gridTemplateColumns: translatedLines.length > 0 ? '1fr 1fr' : '1fr' }}>
+          <div className="lyrics-column">
+            <h3>Original + Tiempos</h3>
+            {lines.map((line, index) => {
+              const isSynced = index < syncedLyrics.length;
+              const timestamp = isSynced ? syncedLyrics[index].time : null;
+
+              return (
+                <p
+                  key={index}
+                  ref={el => { previewLineRefs.current[index] = el; }}
+                  className={index === currentIndex ? 'active' : ''}
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                  <span>{line}</span>
+                  {timestamp !== null && <span style={{ color: '#888', fontSize: '0.8em', marginLeft: '10px' }}>{timestamp}s</span>}
+                </p>
+              );
+            })}
+          </div>
+          {translatedLines.length > 0 && (
+            <div className="lyrics-column">
+              <h3>Traducción</h3>
+              {translatedLines.map((line, index) => (
+                <p key={index} ref={el => { previewTransLineRefs.current[index] = el; }} className={index === currentIndex ? 'active' : ''}>{line || '...'}</p>
+              ))}
+            </div>
+          )}
+
+          {/* JSON display eliminado por solicitud */}
+        </div>
+      )}
     </div>
   );
 }
