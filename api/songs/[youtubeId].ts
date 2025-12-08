@@ -56,7 +56,7 @@ export default async function handler(
           return response.status(200).json({
             id: null, // Indicates not saved yet
             youtubeId,
-            title: fetchedData.metadata.title,
+            title: fetchedData.metadata.songName,
             artist: fetchedData.metadata.artist,
             lyrics: fetchedData.lyrics,
             translatedLyrics: null, // Explicitly null to show empty translation box

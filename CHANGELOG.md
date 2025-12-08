@@ -18,6 +18,24 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 - **Guardado de Traducciones:** Se corrigió un error en la herramienta de sincronización donde las traducciones realizadas después de marcar los tiempos no se guardaban en el JSON final. Ahora el resultado se actualiza dinámicamente.
 - **Integración API Traducción:** Se ajustó el formato de envío de datos al backend para coincidir con la estructura esperada (array de líneas).
 
+## [0.5.2] - 2025-12-08
+
+### Fixed
+- **Duplicación de Títulos:** Implementada lógica robusta en Frontend y Backend para limpiar redundancias en los nombres de canciones (ej. "Slipknot - Slipknot - Song" -> "Song").
+- **Layout SyncTool:** Corregido desbordamiento de botones mediante `flex-wrap` y habilitado scroll vertical en el área del reproductor (`overflow-y: auto`).
+
+### Connected
+- **Preview de Metadatos:** Añadido panel visual compacto en la herramienta de sincronización para confirmar Artista y Título antes de guardar.
+
+## [0.5.2] - 2025-12-08
+
+### Fixed
+- **Duplicación de Títulos:** Implementada lógica robusta en Frontend y Backend para limpiar redundancias en los nombres de canciones (ej. "Slipknot - Slipknot - Song" -> "Song").
+- **Layout SyncTool:** Corregido desbordamiento de botones mediante `flex-wrap` y habilitado scroll vertical en el área del reproductor (`overflow-y: auto`). Implementado diseño "Sticky Footer" para mantener los controles de acción siempre visibles.
+
+### Connected
+- **Preview de Metadatos:** Añadido panel visual compacto en la herramienta de sincronización para confirmar Artista y Título antes de guardar.
+
 ## [0.5.1] - 2025-12-08
 
 ### Changed

@@ -191,7 +191,7 @@ export default function SyncToolPage() {
       setFinalJson(json);
     };
     updateFinalJson();
-  }, [syncedLyrics, translatedLines]);
+  }, [syncedLyrics, translatedLines, metadata]);
 
   const handleSave = async () => {
     if (!finalJson) return;
@@ -232,14 +232,30 @@ export default function SyncToolPage() {
       <div className="player-area">
         <h2>Herramienta de Sincronización</h2>
         {videoId && <YouTube videoId={videoId} opts={playerOptions} onReady={(e: any) => { playerRef.current = e.target; }} />}
-        <h3>Letra Original</h3>
+
+        {/* Preview de Metadata a Guardar */}
+        <div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+          {metadata ? (
+            <div style={{ padding: '8px 12px', backgroundColor: '#2a2a2a', borderRadius: '6px', border: '1px solid #ffc107', display: 'flex', flexDirection: 'column', gap: '2px', maxWidth: '60%' }}>
+              <small style={{ color: '#ffc107', fontSize: '0.7em', fontWeight: 'bold', textTransform: 'uppercase' }}>Se guardará como:</small>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0', fontSize: '0.85em' }}>
+                <span style={{ color: '#eee', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>👤 {metadata.artist}</span>
+                <span style={{ color: '#eee', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎵 {metadata.title}</span>
+              </div>
+            </div>
+          ) : <div />} {/* Spacer if no metadata */}
+
+          <h3 style={{ margin: 0, paddingLeft: '15px', borderLeft: '3px solid #ffc107' }}>Letra Original</h3>
+        </div>
         <textarea value={rawLyrics} onChange={(e) => setRawLyrics(e.target.value)} placeholder="Pega aquí la letra original..." />
         <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
           <button onClick={handleLoadLyrics}>Cargar Manualmente</button>
           <button onClick={fetchLyrics}>🔍 Buscar Letra Automática</button>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+
+
+        <div style={{ display: 'flex', gap: '10px', marginTop: '10px', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button onClick={handleTranslate} disabled={isTranslating || lines.length === 0}>
             {isTranslating ? 'Traduciendo...' : 'Traducir Letra'}
           </button>

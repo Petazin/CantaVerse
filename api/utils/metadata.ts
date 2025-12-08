@@ -41,9 +41,16 @@ export async function fetchVideoMetadata(youtubeId: string): Promise<VideoMetada
                 // Remove " - Topic" suffix that YouTube auto-generates for artist channels
                 artist = channelMatch[1].replace(' - Topic', '').trim();
 
-                // If artist is found, songName is likely the full title (cleaned)
+                // If artist is found, songName is initially the full title (cleaned)
                 songName = cleanTitle;
+
+                // PREVENT DUPLICATION: If the title starts with the artist name AND a separator, remove it.
+                // We enforce a separator ([-–—:]) to avoid stripping the name of self-titled songs (e.g. "Talk Talk" by "Talk Talk").
+                const artistRegex = new RegExp(`^${artist.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*[-–—:]\\s+`, 'i');
+                songName = songName.replace(artistRegex, '').trim();
+
                 console.log(`[metadata] Artist infered from Channel Name: ${artist}`);
+                console.log(`[metadata] Song Name clean up: ${songName}`);
             }
         }
 

@@ -35,7 +35,15 @@ export default async function handler(
         update: {},
         create: {
           youtubeId,
-          title,
+          title: (() => {
+            // Server-side cleanup: Remove artist name from title ONLY if followed by a separator.
+            // This protects self-titled songs (e.g. Song "Iron Maiden" by Artist "Iron Maiden") 
+            // and handles repetitive names (e.g. "Duran Duran") correctly.
+            const escapedArtist = artist.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            // Regex enforces a separator (hyphen, dash, colon) after the artist name.
+            const artistPrefixRegex = new RegExp(`^${escapedArtist}\\s*[-–—:]\\s+`, 'i');
+            return title.replace(artistPrefixRegex, '').trim();
+          })(),
           artist,
         },
       });
@@ -54,7 +62,7 @@ export default async function handler(
       console.error('Error creating song:', error);
       // Check for unique constraint violation to give a more specific error
       if (error instanceof Error && 'code' in error && error.code === 'P2002') {
-         return response.status(409).json({ error: `A song with youtubeId '${request.body.youtubeId}' already exists.` });
+        return response.status(409).json({ error: `A song with youtubeId '${request.body.youtubeId}' already exists.` });
       }
       return response.status(500).json({ error: 'Error creating song in database.' });
     }
