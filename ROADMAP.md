@@ -55,13 +55,13 @@
         - Lógica de fallback: YouTube Captions -> AZLyrics (Directo) -> Google Search (AZLyrics) -> Retorno vacío.
 
 ## 🛠️ Milestone 4.5: Edición y Corrección
-- [ ] **Modo de Edición de Sincronización:**
+- [x] **Modo de Edición de Sincronización:**
     - **Objetivo:** Permitir al usuario corregir una sincronización existente (malos tiempos o letra incorrecta).
     - **Funcionalidades:**
-        - Cargar una configuración guardada en la herramienta de sincronización.
-        - **Ajuste de Tiempos:** Poder modificar el tiempo de cada línea individualmente o aplicar un offset global.
-        - **Edición de Texto:** Poder corregir erratas en la letra original o en la traducción sin perder los tiempos.
-        - "Resincronizar" secciones específicas.
+        - [x] Cargar una configuración guardada en la herramienta de sincronización. (Automático vía API)
+        - [x] **Ajuste de Tiempos:** Poder modificar el tiempo de cada línea individualmente.
+        - [x] **Edición de Texto:** Poder corregir erratas en la letra original sin perder los tiempos.
+        - [x] "Resincronizar" secciones específicas.
 - [ ] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones de la base de datos.
 - [ ] **Autenticación de Usuarios.**
 - [ ] **Rediseño Estético General.**

@@ -91,10 +91,17 @@ function HomePage() {
         {!isLoading && !error && songs.length > 0 && (
           <ul>
             {songs.map(song => (
-              <li key={song.youtubeId}>
+              <li key={song.youtubeId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 0' }}>
                 {/* El enlace ahora apunta al player usando el youtubeId */}
-                <Link to={`/player/${song.youtubeId}`}>
+                <Link to={`/player/${song.youtubeId}`} style={{ flex: 1 }}>
                   {song.artist} - {song.title}
+                </Link>
+                <Link
+                  to={`/sync-tool?videoId=${song.youtubeId}`}
+                  className="button-small"
+                  style={{ marginLeft: '10px', fontSize: '0.8em', padding: '2px 8px', backgroundColor: '#555', color: 'white', textDecoration: 'none', borderRadius: '4px' }}
+                >
+                  ✏️ Editar
                 </Link>
               </li>
             ))}

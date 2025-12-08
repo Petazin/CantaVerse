@@ -121,19 +121,40 @@ export default function SyncToolPage() {
     if (!playerRef.current || currentIndex >= lines.length) return;
     const currentTime = await playerRef.current.getCurrentTime();
 
-    // Auto-Reset: Si empezamos a marcar desde el principio (index 0) y ya había datos (ej. dummy fetch),
-    // limpiamos el array para empezar una sincronización manual limpia.
-
-
     const newSyncedLine: FinalLyricLine = {
       time: parseFloat(currentTime.toFixed(2)),
       original: lines[currentIndex],
       ...(translatedLines[currentIndex] && { translated: translatedLines[currentIndex] }),
     };
 
-    setSyncedLyrics(prev => (currentIndex === 0 ? [newSyncedLine] : [...prev, newSyncedLine]));
+    setSyncedLyrics(prev => {
+      // Create a copy of the previous array
+      const newLyrics = [...prev];
+      // Update the line at the current index (overwriting if exists, appending if not)
+      newLyrics[currentIndex] = newSyncedLine;
+      return newLyrics;
+    });
+
     setCurrentIndex(prev => prev + 1);
   }, [currentIndex, lines, translatedLines, syncedLyrics]);
+
+  // Handler for manual time adjustment via input
+  const handleManualTimeChange = (index: number, newTime: number) => {
+    setSyncedLyrics(prev => {
+      const newLyrics = [...prev];
+      if (newLyrics[index]) {
+        newLyrics[index] = { ...newLyrics[index], time: newTime };
+      }
+      return newLyrics;
+    });
+  };
+
+  // Handler to jump player to a specific time
+  const handleJumpToTime = (time: number) => {
+    if (playerRef.current) {
+      playerRef.current.seekTo(time, true);
+    }
+  };
 
   useEffect(() => {
     if (currentIndex >= 0) {
@@ -142,11 +163,32 @@ export default function SyncToolPage() {
     }
   }, [currentIndex]);
 
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => { if (e.code === 'Space') { e.preventDefault(); handleMarkTime(); } };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [handleMarkTime]);
+  const handleTextChange = (index: number, newText: string) => {
+    // Update lines array
+    setLines(prev => {
+      const newLines = [...prev];
+      newLines[index] = newText;
+      return newLines;
+    });
+
+    // Update rawLyrics for consistency (optional but good)
+    setRawLyrics(prev => {
+      const linesArr = prev.split('\n');
+      if (linesArr[index] !== undefined) {
+        linesArr[index] = newText;
+        return linesArr.join('\n');
+      }
+      return prev;
+    });
+
+    // Also update the sync object if it exists
+    setSyncedLyrics(prev => {
+      if (!prev[index]) return prev;
+      const newSynced = [...prev];
+      newSynced[index] = { ...newSynced[index], original: newText };
+      return newSynced;
+    });
+  };
 
   const getFinalJson = async () => {
     if (!videoId || syncedLyrics.length !== lines.length || lines.length === 0) return null;
@@ -249,8 +291,6 @@ export default function SyncToolPage() {
           <button onClick={fetchLyrics}>🔍 Buscar Letra Automática</button>
         </div>
 
-
-
         <div style={{ display: 'flex', gap: '10px', marginTop: '10px', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button onClick={handleTranslate} disabled={isTranslating || lines.length === 0}>
             {isTranslating ? 'Traduciendo...' : 'Traducir Letra'}
@@ -258,7 +298,6 @@ export default function SyncToolPage() {
           <button onClick={handleMarkTime} disabled={currentIndex >= lines.length}>
             Marcar Tiempo (Espacio)
           </button>
-          {/* El botón de guardar ahora vive aquí y solo se activa al final */}
           <button
             onClick={handleSave}
             disabled={lines.length === 0 || syncedLyrics.length !== lines.length || isSaving}
@@ -280,25 +319,88 @@ export default function SyncToolPage() {
         {saveError && <p style={{ color: 'red', marginTop: '5px' }}>Error: {saveError}</p>}
       </div>
 
-      {/* Grid ajustado: Si no hay traducción, una sola columna. Si hay, dos columnas. */}
+      {/* Grid adjusted */}
       {lines.length > 0 && (
         <div className="lyrics-display" style={{ gridTemplateColumns: translatedLines.length > 0 ? '1fr 1fr' : '1fr' }}>
           <div className="lyrics-column">
             <h3>Original + Tiempos</h3>
             {lines.map((line, index) => {
               const isSynced = index < syncedLyrics.length;
-              const timestamp = isSynced ? syncedLyrics[index].time : null;
+              const lyricData = syncedLyrics[index];
 
               return (
-                <p
+                <div
                   key={index}
                   ref={el => { previewLineRefs.current[index] = el; }}
-                  className={index === currentIndex ? 'active' : ''}
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  className={`lyric-line-item ${index === currentIndex ? 'active' : ''}`}
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}
                 >
-                  <span>{line}</span>
-                  {timestamp !== null && <span style={{ color: '#888', fontSize: '0.8em', marginLeft: '10px' }}>{timestamp}s</span>}
-                </p>
+                  <button
+                    onClick={() => {
+                      setCurrentIndex(index);
+                      if (lyricData) handleJumpToTime(lyricData.time);
+                    }}
+                    title="Re-sincronizar desde aquí / Saltar video"
+                    style={{
+                      padding: '2px 6px',
+                      fontSize: '10px',
+                      marginRight: '8px',
+                      backgroundColor: index === currentIndex ? '#ffc107' : '#333',
+                      color: index === currentIndex ? '#000' : '#fff',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {index === currentIndex ? '▶' : '⏮'}
+                  </button>
+
+                  <input
+                    type="text"
+                    value={line}
+                    onChange={(e) => handleTextChange(index, e.target.value)}
+                    style={{
+                      flex: 1,
+                      background: 'transparent',
+                      border: 'none',
+                      color: '#eee',
+                      fontFamily: 'inherit',
+                      fontSize: 'inherit',
+                      outline: 'none',
+                      borderBottom: '1px solid transparent'
+                    }}
+                    onFocus={(e) => e.target.style.borderBottom = '1px solid #555'}
+                    onBlur={(e) => e.target.style.borderBottom = '1px solid transparent'}
+                  />
+
+                  {isSynced && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={lyricData.time}
+                        onChange={(e) => handleManualTimeChange(index, parseFloat(e.target.value))}
+                        style={{
+                          width: '60px',
+                          padding: '2px',
+                          fontSize: '0.9em',
+                          backgroundColor: '#1a1a1a',
+                          color: '#fff',
+                          border: '1px solid #444',
+                          borderRadius: '4px',
+                          textAlign: 'right'
+                        }}
+                      />
+                      <button
+                        onClick={() => handleJumpToTime(lyricData.time)}
+                        title="Probar tiempo"
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                      >
+                        🔊
+                      </button>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -310,8 +412,6 @@ export default function SyncToolPage() {
               ))}
             </div>
           )}
-
-          {/* JSON display eliminado por solicitud */}
         </div>
       )}
     </div>

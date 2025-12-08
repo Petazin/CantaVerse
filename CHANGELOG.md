@@ -18,6 +18,20 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 - **Guardado de Traducciones:** Se corrigió un error en la herramienta de sincronización donde las traducciones realizadas después de marcar los tiempos no se guardaban en el JSON final. Ahora el resultado se actualiza dinámicamente.
 - **Integración API Traducción:** Se ajustó el formato de envío de datos al backend para coincidir con la estructura esperada (array de líneas).
 
+## [0.6.0] - 2025-12-08
+
+### Added
+- **Modo de Edición:** Nueva funcionalidad que permite cargar canciones previamente sincronizadas para realizar correcciones.
+- **Inputs de Tiempo:** Se añadieron campos numéricos editables para ajustar manualmente el timestamp de cada línea.
+- **Edición de Texto en Línea:** Ahora es posible corregir errores tipográficos en la letra original sin perder la sincronización de tiempos.
+- **Controles de Re-sincronización:**
+    - Botón `⏮` ("Punch-in") para reiniciar la grabación de tiempos desde una línea específica.
+    - Botón `🔊` para probar el tiempo exacto de una línea saltando el video a ese punto.
+- **Botón de Edición Rápida:** Añadido un botón "✏️ Editar" en la lista de canciones de la página principal.
+
+### Changed
+- **Lógica de Guardado (Refactor):** El manejo del array de sincronización (`handleMarkTime`) ahora permite sobrescribir líneas existentes en lugar de solo anexar al final, facilitando el "punch-in".
+
 ## [0.5.2] - 2025-12-08
 
 ### Fixed

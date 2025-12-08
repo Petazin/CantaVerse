@@ -10,6 +10,7 @@ Una aplicación web para visualizar letras de canciones sincronizadas en tiempo 
   - Pegar la letra de la canción.
   - Marcar los tiempos de cada verso usando la barra espaciadora.
   - Generar y exportar un archivo JSON con la sincronización completa.
+  - **Modo Edición:** Cargar sincronizaciones previas para ajustar tiempos manualmente, corregir letra o re-grabar secciones.
 - **Búsqueda de Letras (Experimental):** Un sistema de API que intenta buscar la letra de una canción automáticamente a partir del título del video.
 
 ## 🛠️ Tecnologías Utilizadas
