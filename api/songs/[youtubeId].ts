@@ -7,8 +7,8 @@ export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
-  if (request.method !== 'GET') {
-    response.setHeader('Allow', ['GET']);
+  if (request.method !== 'GET' && request.method !== 'DELETE') {
+    response.setHeader('Allow', ['GET', 'DELETE']);
     return response.status(405).end(`Method ${request.method} Not Allowed`);
   }
 
@@ -23,6 +23,23 @@ export default async function handler(
     return response.status(400).json({ error: 'youtubeId must be a string.' });
   }
 
+  if (request.method === 'DELETE') {
+    try {
+      await prisma.song.delete({
+        where: { youtubeId },
+      });
+      return response.status(200).json({ message: `Song ${youtubeId} deleted successfully` });
+    } catch (error) {
+      console.error(`Error deleting song ${youtubeId}:`, error);
+      // Handle "Record to delete does not exist." from Prisma (P2025)
+      if (error instanceof Error && (error as any).code === 'P2025') {
+        return response.status(404).json({ error: 'Song not found' });
+      }
+      return response.status(500).json({ error: 'Error deleting song/synchronizations' });
+    }
+  }
+
+  // Si es GET
   try {
     const song = await prisma.song.findUnique({
       where: {

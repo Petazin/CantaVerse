@@ -32,6 +32,14 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 ### Changed
 - **Lógica de Guardado (Refactor):** El manejo del array de sincronización (`handleMarkTime`) ahora permite sobrescribir líneas existentes en lugar de solo anexar al final, facilitando el "punch-in".
 
+## [0.7.0] - 2025-12-08
+
+### Added
+- **Gestión de Biblioteca:** Nueva interfaz de inicio con diseño de cuadrícula (Grid) y tarjetas de canciones con portadas (thumbnails).
+- **Buscador Universal:** Barra de búsqueda en tiempo real para filtrar canciones por título o artista.
+- **Eliminación de Canciones:** Implementada la funcionalidad para borrar canciones permanentemente (Frontend y API `DELETE`), con confirmación de seguridad.
+- **Scroll en Biblioteca:** Habilitado scroll vertical independiente para la lista de canciones con cabecera fija ("sticky"), permitiendo navegar bibliotecas extensas.
+
 ## [0.5.2] - 2025-12-08
 
 ### Fixed

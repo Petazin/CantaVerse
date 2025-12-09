@@ -62,6 +62,6 @@
         - [x] **Ajuste de Tiempos:** Poder modificar el tiempo de cada línea individualmente.
         - [x] **Edición de Texto:** Poder corregir erratas en la letra original sin perder los tiempos.
         - [x] "Resincronizar" secciones específicas.
-- [ ] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones de la base de datos.
+- [x] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones de la base de datos. (Implementado: Búsqueda, Grid, Delete)
 - [ ] **Autenticación de Usuarios.**
 - [ ] **Rediseño Estético General.**
