@@ -274,28 +274,28 @@ export default function SyncToolPage() {
         {/* Preview de Metadata a Guardar */}
         <div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
           {metadata ? (
-            <div style={{ padding: '8px 12px', backgroundColor: '#2a2a2a', borderRadius: '6px', border: '1px solid #ffc107', display: 'flex', flexDirection: 'column', gap: '2px', maxWidth: '60%' }}>
-              <small style={{ color: '#ffc107', fontSize: '0.7em', fontWeight: 'bold', textTransform: 'uppercase' }}>Se guardará como:</small>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0', fontSize: '0.85em' }}>
-                <span style={{ color: '#eee', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>👤 {metadata.artist}</span>
-                <span style={{ color: '#eee', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎵 {metadata.title}</span>
+            <div style={{ padding: '10px 15px', backgroundColor: 'rgba(255, 215, 0, 0.05)', borderRadius: 'var(--radius-card)', border: '1px solid var(--accent-primary)', display: 'flex', flexDirection: 'column', gap: '4px', maxWidth: '60%' }}>
+              <small style={{ color: 'var(--accent-primary)', fontSize: '0.7em', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Se guardará como:</small>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0', fontSize: '0.9em' }}>
+                <span style={{ color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: '600' }}>👤 {metadata.artist}</span>
+                <span style={{ color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎵 {metadata.title}</span>
               </div>
             </div>
           ) : <div />} {/* Spacer if no metadata */}
 
-          <h3 style={{ margin: 0, paddingLeft: '15px', borderLeft: '3px solid #ffc107' }}>Letra Original</h3>
+          <h3 style={{ margin: 0, paddingLeft: '15px', borderLeft: '3px solid var(--accent-primary)' }}>Letra Original</h3>
         </div>
-        <textarea value={rawLyrics} onChange={(e) => setRawLyrics(e.target.value)} placeholder="Pega aquí la letra original..." />
+        <textarea value={rawLyrics} onChange={(e) => setRawLyrics(e.target.value)} placeholder="Pega aquí la letra original..." style={{ marginBottom: '10px' }} />
         <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-          <button onClick={handleLoadLyrics}>Cargar Manualmente</button>
-          <button onClick={fetchLyrics}>🔍 Buscar Letra Automática</button>
+          <button onClick={handleLoadLyrics} className="button-secondary" style={{ padding: '8px 16px', fontSize: '0.9em' }}>Cargar Manualmente</button>
+          <button onClick={fetchLyrics} className="button-secondary" style={{ padding: '8px 16px', fontSize: '0.9em' }}>🔍 Buscar Letra Automática</button>
         </div>
 
         <div style={{ display: 'flex', gap: '10px', marginTop: '10px', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button onClick={handleTranslate} disabled={isTranslating || lines.length === 0}>
+          <button onClick={handleTranslate} disabled={isTranslating || lines.length === 0} className="button-secondary">
             {isTranslating ? 'Traduciendo...' : 'Traducir Letra'}
           </button>
-          <button onClick={handleMarkTime} disabled={currentIndex >= lines.length}>
+          <button onClick={handleMarkTime} disabled={currentIndex >= lines.length} className="button-primary">
             Marcar Tiempo (Espacio)
           </button>
           <button

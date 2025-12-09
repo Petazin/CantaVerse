@@ -64,4 +64,5 @@
         - [x] "Resincronizar" secciones específicas.
 - [x] **Gestión de Canciones:** Crear un sistema para listar y seleccionar las canciones de la base de datos. (Implementado: Búsqueda, Grid, Delete)
 - [ ] **Autenticación de Usuarios.**
-- [ ] **Rediseño Estético General.**
+- [x] **Rediseño Estético General:** Implementado "Midnight Stage".
+- [ ] **Autenticación de Usuarios.**

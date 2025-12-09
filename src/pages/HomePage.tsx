@@ -99,7 +99,7 @@ function HomePage() {
     <div className="page-container" style={{ flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
 
       {/* Sección Superior: Carga via URL */}
-      <div className="url-loader-section" style={{ width: '100%', marginBottom: '30px', textAlign: 'center' }}>
+      <div className="url-loader-section glass-panel" style={{ width: '100%', marginBottom: '30px', textAlign: 'center', borderRadius: 'var(--radius-card)', padding: '30px' }}>
         <h2>🎵 Cargar Nueva Canción</h2>
         <div className="url-input-container" style={{ display: 'flex', gap: '10px', justifyContent: 'center', maxWidth: '600px', margin: '0 auto' }}>
           <input
@@ -107,19 +107,19 @@ function HomePage() {
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="Pega una URL de YouTube..."
-            style={{ flex: 1, padding: '10px', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#222', color: 'white' }}
+            style={{ width: 'auto', flex: 1 }} // Override width 100% from CSS if needed, but flex 1 handles it
           />
-          <button onClick={handleLoadFromUrl} style={{ padding: '10px 20px', backgroundColor: '#ffc107', color: 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+          <button onClick={handleLoadFromUrl} className="button-primary">
             Cargar / Sincronizar
           </button>
         </div>
       </div>
 
-      <hr style={{ width: '100%', borderColor: '#333', marginBottom: '30px' }} />
+      <hr style={{ width: '100%', borderColor: 'var(--border-light)', marginBottom: '30px' }} />
 
       {/* Sección Principal: Biblioteca */}
-      <div className="song-list-container" style={{ width: '100%', flex: 1, overflowY: 'auto', minHeight: 0, paddingBottom: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', position: 'sticky', top: 0, backgroundColor: '#121212', zIndex: 10, padding: '10px 0', borderBottom: '1px solid #333' }}>
+      <div className="song-list-container no-scrollbar">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', position: 'sticky', top: 0, backgroundColor: 'rgba(15,15,19,0.95)', backdropFilter: 'blur(10px)', zIndex: 10, padding: '15px 0', borderBottom: '1px solid var(--border-light)' }}>
           <h2 style={{ margin: 0 }}>📚 Tu Biblioteca ({filteredSongs.length})</h2>
 
           {/* Buscador */}
@@ -128,54 +128,30 @@ function HomePage() {
             placeholder="🔍 Buscar por artista o título..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '20px',
-              border: '1px solid #444',
-              backgroundColor: '#1a1a1a',
-              color: 'white',
-              width: '300px'
-            }}
+            style={{ width: '300px' }}
           />
         </div>
 
-        {isLoading && <p style={{ textAlign: 'center', color: '#ffc107' }}>Cargando biblioteca...</p>}
-        {error && <p style={{ color: '#ff4444', textAlign: 'center' }}>{error}</p>}
+        {isLoading && <p style={{ textAlign: 'center', color: 'var(--accent-primary)' }}>Cargando biblioteca...</p>}
+        {error && <p className="error-message" style={{ textAlign: 'center' }}>{error}</p>}
 
         {!isLoading && !error && filteredSongs.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '50px', backgroundColor: '#1a1a1a', borderRadius: '8px', border: '1px dashed #444' }}>
-            <p style={{ fontSize: '1.2em', color: '#888' }}>
+          <div className="glass-panel" style={{ textAlign: 'center', padding: '50px', borderRadius: 'var(--radius-card)', borderStyle: 'dashed' }}>
+            <p style={{ fontSize: '1.2em', color: 'var(--text-secondary)' }}>
               {songs.length === 0 ? "No tienes canciones guardadas aún." : "No se encontraron resultados para tu búsqueda."}
             </p>
           </div>
         )}
 
         {!isLoading && !error && filteredSongs.length > 0 && (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '20px',
-            width: '100%'
-          }}>
+          <div className="song-grid">
             {filteredSongs.map(song => (
-              <div key={song.youtubeId} style={{
-                backgroundColor: '#1e1e1e',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                border: '1px solid #333',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'transform 0.2s, border-color 0.2s'
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = '#555'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#333'; }}
-              >
+              <div key={song.youtubeId} className="song-card">
                 {/* Thumbnail */}
                 <div style={{ position: 'relative', paddingTop: '56.25%', overflow: 'hidden' }}>
                   <img
                     src={`https://img.youtube.com/vi/${song.youtubeId}/hqdefault.jpg`}
                     alt={song.title}
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div style={{
                     position: 'absolute',
@@ -189,32 +165,35 @@ function HomePage() {
                 </div>
 
                 {/* Info */}
-                <div style={{ padding: '15px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <h3 style={{ margin: '0 0 5px 0', fontSize: '1.1em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={song.title}>
+                <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <h3 style={{ margin: '0 0 5px 0', fontSize: '1.2em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={song.title}>
                     {song.title}
                   </h3>
-                  <p style={{ margin: 0, fontSize: '0.9em', color: '#aaa', marginBottom: '15px' }}>
+                  <p style={{ margin: 0, fontSize: '0.9em', color: 'var(--text-secondary)', marginBottom: '20px' }}>
                     {song.artist}
                   </p>
 
-                  <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
+                  <div style={{ marginTop: 'auto', display: 'flex', gap: '10px' }}>
                     <button
                       onClick={() => navigate(`/player/${song.youtubeId}`)}
-                      style={{ flex: 1, padding: '8px', backgroundColor: '#ffc107', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', color: 'black' }}
+                      className="button-primary"
+                      style={{ flex: 1, borderRadius: 'var(--radius-sm)' }}
                     >
                       ▶ Reproducir
                     </button>
                     <button
                       onClick={() => navigate(`/sync-tool?videoId=${song.youtubeId}`)}
                       title="Editar Sincronización"
-                      style={{ padding: '8px 12px', backgroundColor: '#333', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer', color: 'white' }}
+                      className="button-secondary"
+                      style={{ borderRadius: 'var(--radius-sm)', padding: '8px 12px' }}
                     >
                       ✏️
                     </button>
                     <button
                       onClick={() => handleDelete(song.youtubeId, song.title)}
                       title="Eliminar Canción"
-                      style={{ padding: '8px 12px', backgroundColor: '#330000', border: '1px solid #550000', borderRadius: '4px', cursor: 'pointer', color: '#ff4444' }}
+                      className="button-icon"
+                      style={{ backgroundColor: 'rgba(255, 68, 68, 0.1)', border: '1px solid rgba(255, 68, 68, 0.3)', color: '#ff4444' }}
                     >
                       🗑️
                     </button>

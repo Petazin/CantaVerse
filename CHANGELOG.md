@@ -32,6 +32,13 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.
 ### Changed
 - **Lógica de Guardado (Refactor):** El manejo del array de sincronización (`handleMarkTime`) ahora permite sobrescribir líneas existentes en lugar de solo anexar al final, facilitando el "punch-in".
 
+## [0.8.0] - 2025-12-08
+
+### Added
+- **Rediseño "Midnight Stage":** Nueva identidad visual con paleta oscura, acentos dorados y glassmorphism.
+- **Ambient Mode:** Fondo dinámico basado en la portada del video.
+- **Mejoras UI:** Bordes redondeados (Pill-shape), nuevas tipografías (Outfit/Inter), y grid view mejorada.
+
 ## [0.7.0] - 2025-12-08
 
 ### Added
